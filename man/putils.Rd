@@ -10,36 +10,72 @@ The putil package provides personal utility functions.
 }
 \section{mathematical functsions}{
 
-expit, logit, lambertW
+* expit
+* logit
+* lambertW
 }
 
 \section{matrices and vectors}{
 
-vector.norm, vector.normalise, vector.clip, vector.soft.thresh, vector.hard.thresh, vector.scramble, vector.cleanup, matrix.GramSchmidt, matrix.trace, matrix.rank
+* vector.norm
+* vector.normalise
+* vector.clip
+* vector.soft.thresh
+* vector.hard.thresh
+* vector.scramble
+* vector.cleanup
+* matrix.GramSchmidt
+* matrix.trace
+* matrix.rank
+* matrix.standardise
+* matrix.power
+* sinThetaLoss
+* powerMethod
+* ql
+* offdiag
 }
 
 \section{random element generation}{
 
-random.rademacher, random.bernoulli, random.UnitVector, random.OrthogonalMatrix, random.WishartMatrix, random.WignerMatrix, random.psdMatrix, random.SymmetricMatrix
+* random.rademacher
+* random.bernoulli
+* random.UnitVector
+* random.OrthogonalMatrix
+* random.WishartMatrix
+* random.WignerMatrix
+* random.psdMatrix
+* random.SymmetricMatrix
 }
 
 \section{auxiliary functions}{
 
-printPercentage, visualise, find.first, find.last, %=%, sf, sim.params, show.params
+* printPercentage
+* visualise
+* snippet
+* find.first
+* find.last
+* sf
+* sf_exp
+* sim.params
+* show.params
+* '%=%'
 }
 
 \section{statistical functions}{
 
-CvM.test
+* CvM.test
 }
 
 \section{string operations}{
 
-strlen, strstr
+* strlen
+* strstr
+* prefix
+* suffix
 }
 
 \section{NA handling}{
 
-setNA
+* setNA
 }
 

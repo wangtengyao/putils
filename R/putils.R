@@ -3,25 +3,61 @@
 #' The putil package provides personal utility functions.
 #' 
 #' @section mathematical functsions:
-#' expit, logit, lambertW
+#' * expit
+#' * logit
+#' * lambertW
 #' 
 #' @section matrices and vectors:
-#' vector.norm, vector.normalise, vector.clip, vector.soft.thresh, vector.hard.thresh, vector.scramble, vector.cleanup, matrix.GramSchmidt, matrix.trace, matrix.rank
+#' * vector.norm
+#' * vector.normalise
+#' * vector.clip
+#' * vector.soft.thresh
+#' * vector.hard.thresh
+#' * vector.scramble
+#' * vector.cleanup
+#' * matrix.GramSchmidt
+#' * matrix.trace
+#' * matrix.rank
+#' * matrix.standardise
+#' * matrix.power
+#' * sinThetaLoss
+#' * powerMethod
+#' * ql
+#' * offdiag
 #'
 #' @section random element generation:
-#' random.rademacher, random.bernoulli, random.UnitVector, random.OrthogonalMatrix, random.WishartMatrix, random.WignerMatrix, random.psdMatrix, random.SymmetricMatrix
-#' 
+#' * random.rademacher
+#' * random.bernoulli
+#' * random.UnitVector
+#' * random.OrthogonalMatrix
+#' * random.WishartMatrix
+#' * random.WignerMatrix
+#' * random.psdMatrix
+#' * random.SymmetricMatrix
+
 #' @section auxiliary functions:
-#' printPercentage, visualise, find.first, find.last, %=%, sf, sim.params, show.params
-#' 
+#' * printPercentage
+#' * visualise
+#' * snippet
+#' * find.first
+#' * find.last
+#' * sf
+#' * sf_exp
+#' * sim.params
+#' * show.params
+#' * '%=%'
+
 #' @section statistical functions:
-#' CvM.test
+#' * CvM.test
 #' 
 #' @section string operations:
-#' strlen, strstr
+#' * strlen
+#' * strstr
+#' * prefix
+#' * suffix
 #' 
 #' @section NA handling:
-#' setNA
+#' * setNA
 #' 
 #' @docType package
 #' @name putils
@@ -30,9 +66,7 @@
 #' @importFrom stats na.omit rbinom rnorm runif
 NULL
 
-###############################################
-##        mathematical functions             ##
-###############################################
+###########   Mathematical functions   ##############
 
 #' Inverse of the logistic function
 #' @param a a real number 
@@ -101,9 +135,8 @@ lambertW = function(z,b=0,maxiter=10,eps=.Machine$double.eps,
   return(w)
 }
 
-###############################################
-##           matrices and vectors            ##
-###############################################
+###########   Matrices and vectors   ##############
+
 #' Norm of a vector
 #' @description Calculate the entrywise L_q norm of a vector or a matrix
 #' @param v a vector of real numbers 
@@ -252,7 +285,7 @@ powerMethod <- function(A, k = 1, eps = 1e-10, maxiter = 1000){
 #' Standardise the columns of a matrix to have mean zero and length 1
 #' @param X a matrix
 #' @return a standardised matrix
-standardise <- function(X){
+matrix.standardise <- function(X){
   X <- sweep(X, 2, colMeans(X))
   X <- apply(X, 2, vector.normalise)
   return(X)
@@ -318,43 +351,7 @@ matrix.power <- function(A, power, pseudoinverse=TRUE){
   }
 }
 
-#' Show snippet of a large vector/matrix
-#' @param A a vector, matrix or array
-snippet <- function(A, nrow=5, ncol=nrow){
-  if (is.vector(A)){
-    cat('Vector of length ', length(A), ', with leading entries:\n', sep='')
-    print(A[seq_len(min(length(A), nrow))])
-  } else if (is.matrix(A)) {
-    cat('Matrix with shape (', paste(as.character(dim(A)), collapse=', '), 
-        '), with leading entries:\n')
-    print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
-  } else if (is.array(A)) {
-    dims <- dim(A); d <- length(dims); 
-    shape <- paste(as.character(dim(A)), collapse=', ')
-    if (d == 1){
-      cat('1-d array of length ', dims, ', with leading entries:\n', sep='')
-      print(A[seq_len(min(length(A), nrow))])
-    } else if (d == 2){
-      cat('2-d array with shape (', shape, '), with leading entries:\n')
-      print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
-    } else {
-      frames <- rep(0, d-2); starting_index <- 0
-      for (i in seq_len(d-2)){
-        frames[d-1-i] <- sample(dims[d+1-i], 1)
-        starting_index <- starting_index + prod(head(dims, d-i)) * (frames[d-1-i] - 1)
-      }
-      cat(d, '-d array with shape (', shape, '), with leading entries in frame [:, :, ',
-          paste(as.character(frames), collapse=', '), ']:\n', sep='')
-      M <- matrix(A[starting_index + seq_len(dims[1]*dims[2])], dims[1], dims[2])
-      print(M[seq_len(min(nrow, nrow(M))), seq_len(min(ncol, ncol(M)))])
-    }
-  } else {
-    stop('A need to be a vector or a matrix or an array.')
-  }
-}
-###############################################
-##           auxiliary functions             ##
-###############################################
+############### Auxiliary functions ###############
 
 #' Print percentage
 #' @param ind a vector of for loop interator
@@ -395,6 +392,41 @@ visualise <- function(X, aspect.ratio = c('automatic', 'actual'), axes = FALSE, 
     else {
         image(t(X[n:1,]), axes = axes, frame.plot = frame.plot)
     }
+}
+
+#' Show snippet of a large vector/matrix
+#' @param A a vector, matrix or array
+snippet <- function(A, nrow=5, ncol=nrow){
+  if (is.vector(A)){
+    cat('Vector of length ', length(A), ', with leading entries:\n', sep='')
+    print(A[seq_len(min(length(A), nrow))])
+  } else if (is.matrix(A)) {
+    cat('Matrix with shape (', paste(as.character(dim(A)), collapse=', '), 
+        '), with leading entries:\n')
+    print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
+  } else if (is.array(A)) {
+    dims <- dim(A); d <- length(dims); 
+    shape <- paste(as.character(dim(A)), collapse=', ')
+    if (d == 1){
+      cat('1-d array of length ', dims, ', with leading entries:\n', sep='')
+      print(A[seq_len(min(length(A), nrow))])
+    } else if (d == 2){
+      cat('2-d array with shape (', shape, '), with leading entries:\n')
+      print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
+    } else {
+      frames <- rep(0, d-2); starting_index <- 0
+      for (i in seq_len(d-2)){
+        frames[d-1-i] <- sample(dims[d+1-i], 1)
+        starting_index <- starting_index + prod(head(dims, d-i)) * (frames[d-1-i] - 1)
+      }
+      cat(d, '-d array with shape (', shape, '), with leading entries in frame [:, :, ',
+          paste(as.character(frames), collapse=', '), ']:\n', sep='')
+      M <- matrix(A[starting_index + seq_len(dims[1]*dims[2])], dims[1], dims[2])
+      print(M[seq_len(min(nrow, nrow(M))), seq_len(min(ncol, ncol(M)))])
+    }
+  } else {
+    stop('A need to be a vector or a matrix or an array.')
+  }
 }
 
 #' Find the location of first TRUE value in a boolean vector
@@ -513,9 +545,7 @@ bunch = function(...) {
 }
 
 
-###############################################
-##           random variables                ##
-###############################################
+########### Random element generation ##########
 
 #' generate n rademacher random variables
 #' @param n length of random vector
@@ -583,9 +613,8 @@ random.SymmetricMatrix <- function(n){
     V%*%Lambda%*%t(V)
 }
 
-###############################################
-##        statistical functions             ##
-###############################################
+########## statistical functions ##########
+
 #' Cramer--von-Mise two sample test
 #' @param x a vector
 #' @param y a vector
@@ -609,9 +638,8 @@ CvM.test <- function(x,y){
     ret
 }
 
-###############################################
-##        string operations                  ##
-###############################################
+########## string operations ##########
+
 #' String length
 #' @param str a string
 #' @return its length
@@ -652,9 +680,7 @@ suffix <- function(str, len){
   substr(str, strlen(str) - len + 1, strlen(str))
 }
 
-###############################################
-##        NA handling                        ##
-###############################################
+########### NA handling ##########
 #' Change all NA values in v to a
 #' @param v a vector
 #' @param a target value
