@@ -1,0 +1,13 @@
+Package: putils
+Type: Package
+Title: Personal Utility Functions
+Version: 1.2.1
+Date: 2019-07-01
+Author: Tengyao Wang
+Maintainer: Tengyao Wang <t.wang@ucl.ac.uk>
+Description: Contains functions that are frequently used in personal coding.
+Encoding: UTF-8
+Imports:
+	graphics, stats
+License: GPL-2
+RoxygenNote: 6.1.1
