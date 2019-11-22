@@ -1,6 +1,6 @@
 #' putils: A package for personal utility functions.
 #'
-#' The putil package provides personal utility functions.
+#' The putils package provides personal utility functions.
 #' 
 #' @section mathematical functsions:
 #' * expit
