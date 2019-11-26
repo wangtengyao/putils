@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.SymmetricMatrix}
 \alias{random.SymmetricMatrix}
-\title{generate a random symmetric matrix}
+\title{Generate a random symmetric matrix}
 \usage{
 random.SymmetricMatrix(n)
 }
@@ -10,5 +10,5 @@ random.SymmetricMatrix(n)
 \item{n}{dimension}
 }
 \description{
-generate a random symmetric matrix
+Generate a random symmetric matrix
 }

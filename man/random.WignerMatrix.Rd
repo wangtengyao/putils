@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.WignerMatrix}
 \alias{random.WignerMatrix}
-\title{generate a random nxn Wigner matrix, where off diagonals are N(0,1) and diagonals are N(0,2)}
+\title{Generate a random nxn Wigner matrix, where off diagonals are N(0,1) and diagonals are N(0,2)}
 \usage{
 random.WignerMatrix(n)
 }
@@ -10,5 +10,5 @@ random.WignerMatrix(n)
 \item{n}{dimension}
 }
 \description{
-generate a random nxn Wigner matrix, where off diagonals are N(0,1) and diagonals are N(0,2)
+Generate a random nxn Wigner matrix, where off diagonals are N(0,1) and diagonals are N(0,2)
 }

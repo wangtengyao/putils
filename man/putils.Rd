@@ -3,13 +3,16 @@
 \docType{package}
 \name{putils}
 \alias{putils}
-\alias{putils-package}
 \title{putils: A package for personal utility functions.}
 \description{
-The putil package provides personal utility functions.
+The putils package provides personal utility functions.
 }
 \section{mathematical functsions}{
 
+\itemize{
+  \item expit
+  \item logit
+}
 * expit
 * logit
 * lambertW

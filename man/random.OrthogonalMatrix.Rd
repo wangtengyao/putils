@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.OrthogonalMatrix}
 \alias{random.OrthogonalMatrix}
-\title{generate a random nxn orthogonal matrix}
+\title{Generate a random nxn orthogonal matrix}
 \usage{
 random.OrthogonalMatrix(n)
 }
@@ -10,5 +10,5 @@ random.OrthogonalMatrix(n)
 \item{n}{dimension}
 }
 \description{
-generate a random nxn orthogonal matrix
+Generate a random nxn orthogonal matrix
 }

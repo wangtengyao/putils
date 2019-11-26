@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.UnitVector}
 \alias{random.UnitVector}
-\title{generate a random unit vectors in R^n}
+\title{Generate a random unit vectors in R^n}
 \usage{
 random.UnitVector(n)
 }
@@ -10,5 +10,5 @@ random.UnitVector(n)
 \item{n}{length of random vector}
 }
 \description{
-generate a random unit vectors in R^n
+Generate a random unit vectors in R^n
 }

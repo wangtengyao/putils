@@ -13,7 +13,7 @@ ql(A)
 a list of two matrices Q and L so that A = QL
 \itemize{
   \item Q - nxp matrix with orthonormal columns with the same span as A
-  \item L - a lower triangular pxp matrix 
+  \item L - a lower triangular pxp matrix
 }
 }
 \description{

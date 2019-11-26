@@ -1,12 +1,16 @@
 #' putils: A package for personal utility functions.
 #'
 #' The putils package provides personal utility functions.
-#' 
+#'
 #' @section mathematical functsions:
+#' \itemize{
+#'   \item expit
+#'   \item logit
+#' }
 #' * expit
 #' * logit
 #' * lambertW
-#' 
+#'
 #' @section matrices and vectors:
 #' * vector.norm
 #' * vector.normalise
@@ -49,19 +53,19 @@
 
 #' @section statistical functions:
 #' * CvM.test
-#' 
+#'
 #' @section string operations:
 #' * strlen
 #' * strstr
 #' * prefix
 #' * suffix
-#' 
+#'
 #' @section NA handling:
 #' * setNA
-#' 
+#'
 #' @docType package
 #' @name putils
-#' 
+#'
 #' @importFrom graphics image
 #' @importFrom stats na.omit rbinom rnorm runif
 NULL
@@ -69,7 +73,7 @@ NULL
 ###########   Mathematical functions   ##############
 
 #' Inverse of the logistic function
-#' @param a a real number 
+#' @param a a real number
 #' @return a real number of value 1/(exp(-a)+1)
 #' @export
 #' @seealso \code{\link{logit}}
@@ -77,15 +81,15 @@ expit <- function(a){ 1/(exp(-a)+1) }
 
 
 #' The logistic function
-#' @param a a real number 
+#' @param a a real number
 #' @return a real number of value log(a/(1-a))
 #' @export
 #' @seealso \code{\link{expit}}
 logit <- function(a){ -log(1/a-1) }
 
 #' The Lambert W function
-#' @description the Lambert W function is the inverse of f(x) = x*exp(x). The two main branches are b = 0 and b = -1. 
-#' @param z a complex number 
+#' @description the Lambert W function is the inverse of f(x) = x*exp(x). The two main branches are b = 0 and b = -1.
+#' @param z a complex number
 #' @param b an integer, determining the branch of the W function
 #' @param maxiter maximum number of Halley iteration
 #' @param eps floating point tolerance
@@ -139,7 +143,7 @@ lambertW = function(z,b=0,maxiter=10,eps=.Machine$double.eps,
 
 #' Norm of a vector
 #' @description Calculate the entrywise L_q norm of a vector or a matrix
-#' @param v a vector of real numbers 
+#' @param v a vector of real numbers
 #' @param q a nonnegative real number or Inf
 #' @param na.rm boolean, whether to remove NA before calculation
 #' @return the entrywise L_q norm of a vector or a matrix
@@ -153,7 +157,7 @@ vector.norm <- function(v, q = 2, na.rm = FALSE){
 }
 
 #' Normalise a vector
-#' @param v a vector of real numbers 
+#' @param v a vector of real numbers
 #' @param q a nonnegative real number or Inf
 #' @param na.rm boolean, whether to remove NA before calculation
 #' @return normalised version of this vector
@@ -164,7 +168,7 @@ vector.normalise <- function(v, q = 2, na.rm = FALSE){
 
 #' Clipping a vector from above and below
 #' @description Clipping vector or matrix x from above and below
-#' @param x a vector of real numbers 
+#' @param x a vector of real numbers
 #' @param upper clip above this value
 #' @param lower clip below this value
 #' @return the entrywise L_q norm of a vector or a matrix
@@ -177,7 +181,7 @@ vector.clip <- function(x, upper = Inf, lower = -upper){
 }
 
 #' Soft thresholding a vector
-#' @param x a vector of real numbers 
+#' @param x a vector of real numbers
 #' @param lambda soft thresholding value
 #' @return a vector of the same length
 #' @description entries of v are moved towards 0 by the amount lambda until they hit 0.
@@ -187,7 +191,7 @@ vector.soft.thresh <- function(x, lambda){
 }
 
 #' Hard thresholding a vector
-#' @param x a vector of real numbers 
+#' @param x a vector of real numbers
 #' @param lambda hard thresholding value
 #' @return a vector of the same length
 #' @description entries of v that are below lambda are set to 0.
@@ -209,7 +213,7 @@ matrix.GramSchmidt <- function(A, tolerance = 1e-14){
   B <- qr.Q(qrdecomp)
   B[,abs(v)<tolerance] <- 0
   w <- sign(diag(B)); w[w==0] <- 1;
-  W <- matrix(rep(c(w, rep(1,p-length(w))), each = n), n, p) 
+  W <- matrix(rep(c(w, rep(1,p-length(w))), each = n), n, p)
   B <- B*W
   B
 }
@@ -296,7 +300,7 @@ matrix.standardise <- function(X){
 #' @return a list of two matrices Q and L so that A = QL
 #' \itemize{
 #'   \item Q - nxp matrix with orthonormal columns with the same span as A
-#'   \item L - a lower triangular pxp matrix 
+#'   \item L - a lower triangular pxp matrix
 #' }
 ql <- function(A){
   B <- A[,ncol(A):1]
@@ -308,8 +312,8 @@ ql <- function(A){
   return(list(Q=Q, L=L))
 }
 
-#' extracting the off-diagonal part of A
-#' @param A a rectangular matrix 
+#' Extracting the off-diagonal part of A
+#' @param A a rectangular matrix
 #' @param as.vector if FALSE, a matrix with main diagonal set to 0 is returned
 #' otherwise, a vector of offdiagonal entries is returned
 offdiag <- function(A, as.vector=FALSE){
@@ -343,7 +347,7 @@ matrix.power <- function(A, power, pseudoinverse=TRUE){
       evals[evals!=0] <- 1/evals[evals!=0]
     }
   }
-  
+
   if (symm && min(Re(evals)) >=0) {
     return(evecs %*% diag(evals^power, nrow=nrow(A)) %*% t(evecs))
   } else {
@@ -367,7 +371,7 @@ printPercentage <- function (ind, tot){
         for (i in (len-1):1) contrib[i] <- contrib[i+1] * tot[i+1]
     }
     grand_tot <- contrib[1] * tot[1]
-    count <- (sum(contrib * (ind - 1)) + 1) 
+    count <- (sum(contrib * (ind - 1)) + 1)
     out <- ""
     if (sum(ind-1)>0) out <- paste0(rep("\b", nchar(round((count-1)/grand_tot * 100))+1), collapse = "")
     out <- paste0(out, round(count/grand_tot*100), "%")
@@ -381,7 +385,7 @@ printPercentage <- function (ind, tot){
 #' @param aspect.ratio if automatic, it will be calculated automatically to fit screen, otherwise, the actual dimension of the matrix will be used.
 #' @param axes whether to display axes
 #' @param frame.plot whether to draw a frame
-#' @return a color plot of matrix value magnitude 
+#' @return a color plot of matrix value magnitude
 #' @export
 visualise <- function(X, aspect.ratio = c('automatic', 'actual'), axes = FALSE, frame.plot = FALSE){
     aspect.ratio = match.arg(aspect.ratio)
@@ -401,11 +405,11 @@ snippet <- function(A, nrow=5, ncol=nrow){
     cat('Vector of length ', length(A), ', with leading entries:\n', sep='')
     print(A[seq_len(min(length(A), nrow))])
   } else if (is.matrix(A)) {
-    cat('Matrix with shape (', paste(as.character(dim(A)), collapse=', '), 
+    cat('Matrix with shape (', paste(as.character(dim(A)), collapse=', '),
         '), with leading entries:\n')
     print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
   } else if (is.array(A)) {
-    dims <- dim(A); d <- length(dims); 
+    dims <- dim(A); d <- length(dims);
     shape <- paste(as.character(dim(A)), collapse=', ')
     if (d == 1){
       cat('1-d array of length ', dims, ', with leading entries:\n', sep='')
@@ -497,7 +501,7 @@ show.params <- function(x){
   substr(str, 2, nchar(str)-2)
 }
 
-#' Multiple assignment 
+#' Multiple assignment
 #' @description assign multiple items in a list on RHS to multiple items in a list on LHS
 #' @details A sample usage is  bunch(a,b,c) %=% list('hello', 123, list('apple','orange')), or
 #' bunch(a,b,c) %=% 1:3
@@ -525,11 +529,11 @@ show.params <- function(x){
 extendToMatch <- function(source, destin) {
   s <- length(source)
   d <- length(destin)
-  
+
   # Assume that destin is a length when it is a single number and source is not
   if(d==1 && s>1 && !is.null(as.numeric(destin)))
     d <- destin
-  
+
   dif <- d - s
   if (dif > 0) {
     source <- rep(source, ceiling(d/s))[1:d]
@@ -547,14 +551,14 @@ bunch = function(...) {
 
 ########### Random element generation ##########
 
-#' generate n rademacher random variables
+#' Generate n rademacher random variables
 #' @param n length of random vector
 #' @export
 random.rademacher <- function(n=1){
     sample(c(-1,1),n,replace=T)
 }
 
-#' generate n random Bernoulli variables
+#' Generate n random Bernoulli variables
 #' @param n length of random vector
 #' @param p probability (can be a vector)
 #' @export
@@ -562,7 +566,7 @@ random.bernoulli <- function(n=1, p=0.5) {
     rbinom(n,1,p)
 }
 
-#' generate a random unit vectors in R^n
+#' Generate a random unit vectors in R^n
 #' @param n length of random vector
 #' @export
 random.UnitVector <- function(n){
@@ -570,7 +574,7 @@ random.UnitVector <- function(n){
     v/vector.norm(v)
 }
 
-#' generate a random nxn orthogonal matrix 
+#' Generate a random nxn orthogonal matrix
 #' @param n dimension
 #' @export
 random.OrthogonalMatrix <- function(n){
@@ -578,7 +582,7 @@ random.OrthogonalMatrix <- function(n){
     qr.Q(qr(A))
 }
 
-#' generate a random nxn Wishart matrix 
+#' Generate a random nxn Wishart matrix
 #' @param n dimension
 #' @export
 random.WishartMatrix <- function(n){
@@ -586,7 +590,7 @@ random.WishartMatrix <- function(n){
     t(A)%*%A
 }
 
-#' generate a random nxn Wigner matrix, where off diagonals are N(0,1) and diagonals are N(0,2)
+#' Generate a random nxn Wigner matrix, where off diagonals are N(0,1) and diagonals are N(0,2)
 #' @param n dimension
 #' @export
 random.WignerMatrix <- function(n){
@@ -595,7 +599,7 @@ random.WignerMatrix <- function(n){
     M + t(M)
 }
 
-#' generate a random positive semidefinite matrix with operator norm <=1
+#' Generate a random positive semidefinite matrix with operator norm <=1
 #' @param n dimension
 #' @export
 random.psdMatrix <- function(n){
@@ -604,7 +608,7 @@ random.psdMatrix <- function(n){
     V%*%Lambda%*%t(V)
 }
 
-#' generate a random symmetric matrix
+#' Generate a random symmetric matrix
 #' @param n dimension
 #' @export
 random.SymmetricMatrix <- function(n){
@@ -613,7 +617,7 @@ random.SymmetricMatrix <- function(n){
     V%*%Lambda%*%t(V)
 }
 
-########## statistical functions ##########
+########## Statistical functions ##########
 
 #' Cramer--von-Mise two sample test
 #' @param x a vector
@@ -666,7 +670,7 @@ strstr <- function(haystack, needle, startpos=1, n=1){
 #' @param str a string
 #' @param len length of substring
 #' @export
-#' 
+#'
 prefix <- function(str, len){
   substr(str, 1, len)
 }
@@ -675,7 +679,7 @@ prefix <- function(str, len){
 #' @param str a string
 #' @param len length of substring
 #' @export
-#' 
+#'
 suffix <- function(str, len){
   substr(str, strlen(str) - len + 1, strlen(str))
 }

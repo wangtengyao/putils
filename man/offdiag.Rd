@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{offdiag}
 \alias{offdiag}
-\title{extracting the off-diagonal part of A}
+\title{Extracting the off-diagonal part of A}
 \usage{
 offdiag(A, as.vector = FALSE)
 }
@@ -13,5 +13,5 @@ offdiag(A, as.vector = FALSE)
 otherwise, a vector of offdiagonal entries is returned}
 }
 \description{
-extracting the off-diagonal part of A
+Extracting the off-diagonal part of A
 }

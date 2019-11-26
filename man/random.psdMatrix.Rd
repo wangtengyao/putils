@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.psdMatrix}
 \alias{random.psdMatrix}
-\title{generate a random positive semidefinite matrix with operator norm <=1}
+\title{Generate a random positive semidefinite matrix with operator norm <=1}
 \usage{
 random.psdMatrix(n)
 }
@@ -10,5 +10,5 @@ random.psdMatrix(n)
 \item{n}{dimension}
 }
 \description{
-generate a random positive semidefinite matrix with operator norm <=1
+Generate a random positive semidefinite matrix with operator norm <=1
 }

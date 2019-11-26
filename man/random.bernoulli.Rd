@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.bernoulli}
 \alias{random.bernoulli}
-\title{generate n random Bernoulli variables}
+\title{Generate n random Bernoulli variables}
 \usage{
 random.bernoulli(n = 1, p = 0.5)
 }
@@ -12,5 +12,5 @@ random.bernoulli(n = 1, p = 0.5)
 \item{p}{probability (can be a vector)}
 }
 \description{
-generate n random Bernoulli variables
+Generate n random Bernoulli variables
 }

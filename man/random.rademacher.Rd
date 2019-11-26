@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.rademacher}
 \alias{random.rademacher}
-\title{generate n rademacher random variables}
+\title{Generate n rademacher random variables}
 \usage{
 random.rademacher(n = 1)
 }
@@ -10,5 +10,5 @@ random.rademacher(n = 1)
 \item{n}{length of random vector}
 }
 \description{
-generate n rademacher random variables
+Generate n rademacher random variables
 }

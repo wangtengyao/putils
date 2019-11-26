@@ -2,7 +2,7 @@
 % Please edit documentation in R/putils.R
 \name{random.WishartMatrix}
 \alias{random.WishartMatrix}
-\title{generate a random nxn Wishart matrix}
+\title{Generate a random nxn Wishart matrix}
 \usage{
 random.WishartMatrix(n)
 }
@@ -10,5 +10,5 @@ random.WishartMatrix(n)
 \item{n}{dimension}
 }
 \description{
-generate a random nxn Wishart matrix
+Generate a random nxn Wishart matrix
 }
