@@ -367,6 +367,7 @@ matrix.power <- function(A, power, pseudoinverse=TRUE){
 #' @param ... R objects printable using cat()
 #' @details This is a wrapper function that prints R objects using cat() with
 #' no space separation and end with a newline character
+#' @export
 println <- function(...){
   .Internal(cat(c(list(...), '\n'), file=stdout(), sep='', fill=FALSE, labels=NULL, append=FALSE))
 }
