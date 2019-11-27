@@ -271,6 +271,7 @@ sinThetaLoss <- function(U,V){
 #' @param k number of leading eigenvectors/eigenvalues
 #' @param eps tolerance for convergence (in Frobenius norm)
 #' @param maxiter maximum iteration
+#' @export
 powerMethod <- function(A, k = 1, eps = 1e-10, maxiter = 1000){
   if (nrow(A) != ncol(A)) stop('powerMethod requires a square matrix')
   d <- nrow(A)
@@ -289,6 +290,7 @@ powerMethod <- function(A, k = 1, eps = 1e-10, maxiter = 1000){
 #' Standardise the columns of a matrix to have mean zero and length 1
 #' @param X a matrix
 #' @return a standardised matrix
+#' @export
 matrix.standardise <- function(X){
   X <- sweep(X, 2, colMeans(X))
   X <- apply(X, 2, vector.normalise)
@@ -302,6 +304,7 @@ matrix.standardise <- function(X){
 #'   \item Q - nxp matrix with orthonormal columns with the same span as A
 #'   \item L - a lower triangular pxp matrix
 #' }
+#' @export
 ql <- function(A){
   B <- A[,ncol(A):1]
   tmp <- qr(B)
@@ -316,6 +319,7 @@ ql <- function(A){
 #' @param A a rectangular matrix
 #' @param as.vector if FALSE, a matrix with main diagonal set to 0 is returned
 #' otherwise, a vector of offdiagonal entries is returned
+#' @export
 offdiag <- function(A, as.vector=FALSE){
   mask <- matrix(TRUE, nrow=nrow(A), ncol=ncol(A))
   diag(mask) <- FALSE
@@ -331,6 +335,7 @@ offdiag <- function(A, as.vector=FALSE){
 #' @param A a square matrix
 #' @param power power exponent
 #' @param pseudoinverse whether to use pseudoinverse if power is negative
+#' @export
 matrix.power <- function(A, power, pseudoinverse=TRUE){
   if (nrow(A)!=ncol(A)) stop('A need to be a square matrix.')
   symm <- isSymmetric(A)
@@ -400,6 +405,12 @@ visualise <- function(X, aspect.ratio = c('automatic', 'actual'), axes = FALSE, 
 
 #' Show snippet of a large vector/matrix
 #' @param A a vector, matrix or array
+#' @param nrow number of rows to show
+#' @param ncol number of columns to show, ignored for vectors
+#' @details Show the first nrow entries of a vector, the first nrow x ncol
+#' submatrix of a matrix. If A is an array, then randomly sample the third to
+#' the last indices and show the first nrow x ncol entries in that frame.
+#' @export
 snippet <- function(A, nrow=5, ncol=nrow){
   if (is.vector(A)){
     cat('Vector of length ', length(A), ', with leading entries:\n', sep='')

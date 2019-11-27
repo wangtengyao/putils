@@ -4,7 +4,8 @@
 \alias{lambertW}
 \title{The Lambert W function}
 \usage{
-lambertW(z, b = 0, maxiter = 10, eps = .Machine$double.eps, min.imag = 1e-09)
+lambertW(z, b = 0, maxiter = 10, eps = .Machine$double.eps,
+  min.imag = 1e-09)
 }
 \arguments{
 \item{z}{a complex number}

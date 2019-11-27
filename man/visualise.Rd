@@ -4,12 +4,8 @@
 \alias{visualise}
 \title{Visualise a matrix X}
 \usage{
-visualise(
-  X,
-  aspect.ratio = c("automatic", "actual"),
-  axes = FALSE,
-  frame.plot = FALSE
-)
+visualise(X, aspect.ratio = c("automatic", "actual"), axes = FALSE,
+  frame.plot = FALSE)
 }
 \arguments{
 \item{X}{a matrix}

@@ -8,7 +8,16 @@ snippet(A, nrow = 5, ncol = nrow)
 }
 \arguments{
 \item{A}{a vector, matrix or array}
+
+\item{nrow}{number of rows to show}
+
+\item{ncol}{number of columns to show, ignored for vectors}
 }
 \description{
 Show snippet of a large vector/matrix
+}
+\details{
+Show the first nrow entries of a vector, the first nrow x ncol
+submatrix of a matrix. If A is an array, then randomly sample the third to
+the last indices and show the first nrow x ncol entries in that frame.
 }

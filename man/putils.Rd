@@ -3,6 +3,7 @@
 \docType{package}
 \name{putils}
 \alias{putils}
+\alias{putils-package}
 \title{putils: A package for personal utility functions.}
 \description{
 The putils package provides personal utility functions.
