@@ -54,6 +54,7 @@ The putils package provides personal utility functions.
 \section{auxiliary functions}{
 
 * printPercentage
+* println
 * visualise
 * snippet
 * find.first

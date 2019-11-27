@@ -41,6 +41,7 @@
 
 #' @section auxiliary functions:
 #' * printPercentage
+#' * println
 #' * visualise
 #' * snippet
 #' * find.first
@@ -361,6 +362,14 @@ matrix.power <- function(A, power, pseudoinverse=TRUE){
 }
 
 ############### Auxiliary functions ###############
+
+#' Print line
+#' @param ... R objects printable using cat()
+#' @details This is a wrapper function that prints R objects using cat() with
+#' no space separation and end with a newline character
+println <- function(...){
+  .Internal(cat(c(list(...), '\n'), file=stdout(), sep='', fill=FALSE, labels=NULL, append=FALSE))
+}
 
 #' Print percentage
 #' @param ind a vector of for loop interator
