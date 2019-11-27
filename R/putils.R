@@ -417,7 +417,7 @@ snippet <- function(A, nrow=5, ncol=nrow){
     print(A[seq_len(min(length(A), nrow))])
   } else if (is.matrix(A)) {
     cat('Matrix with shape (', paste(as.character(dim(A)), collapse=', '),
-        '), with leading entries:\n')
+        '), with leading entries:\n', sep='')
     print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
   } else if (is.array(A)) {
     dims <- dim(A); d <- length(dims);
@@ -426,7 +426,7 @@ snippet <- function(A, nrow=5, ncol=nrow){
       cat('1-d array of length ', dims, ', with leading entries:\n', sep='')
       print(A[seq_len(min(length(A), nrow))])
     } else if (d == 2){
-      cat('2-d array with shape (', shape, '), with leading entries:\n')
+      cat('2-d array with shape (', shape, '), with leading entries:\n', sep='')
       print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
     } else {
       frames <- rep(0, d-2); starting_index <- 0
