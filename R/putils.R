@@ -26,7 +26,8 @@
 #' * matrix.power
 #' * sinThetaLoss
 #' * powerMethod
-#' * ql
+#' * QR
+#' * QL
 #' * offdiag
 #'
 #' @section random element generation:
@@ -298,19 +299,39 @@ matrix.standardise <- function(X){
   return(X)
 }
 
+
+#' QR decomposition of a matrix
+#' @param A an nxp matrix for QR decomposition
+#' @return a list of two matrices Q and R so that A = QR
+#' \itemize{
+#'   \item Q - nxp matrix with orthonormal columns with the same span as A
+#'   \item R - a upper triangular pxp matrix with nonnegative diagonal entries
+#' }
+#' @export
+QR <- function(A){
+  tmp <- qr(A)
+  Q <- qr.Q(tmp)
+  R <- qr.R(tmp)
+  sign_flips <- sign(diag(R))
+  sign_flips[sign_flips == 0] <- 1
+  Q <- Q %*% diag(sign_flips)
+  R <- diag(sign_flips) %*% R
+  return(list(Q=Q, R=R))
+}
+
 #' QL decomposition of a matrix
 #' @param A an nxp matrix for QL decomposition
 #' @return a list of two matrices Q and L so that A = QL
 #' \itemize{
 #'   \item Q - nxp matrix with orthonormal columns with the same span as A
-#'   \item L - a lower triangular pxp matrix
+#'   \item L - a lower triangular pxp matrix with nonnegative diagonal entries
 #' }
 #' @export
-ql <- function(A){
+QL <- function(A){
   B <- A[,ncol(A):1]
-  tmp <- qr(B)
-  Q <- qr.Q(tmp)
-  R <- qr.R(tmp)
+  tmp <- QR(B)
+  Q <- tmp$Q
+  R <- tmp$R
   Q <- Q[,ncol(Q):1]
   L <- R[nrow(R):1,ncol(R):1]
   return(list(Q=Q, L=L))

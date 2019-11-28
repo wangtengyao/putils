@@ -35,7 +35,8 @@ The putils package provides personal utility functions.
 * matrix.power
 * sinThetaLoss
 * powerMethod
-* ql
+* QR
+* QL
 * offdiag
 }
 
