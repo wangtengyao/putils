@@ -404,6 +404,7 @@ println <- function(...){
 #' df <- data.frame(name=c('Alpha', 'Beta', 'Gamma', 'Delta'),
 #'                  size=c(100L,200L,300L,400L), score=c(23.091,19.978,1119.229, 0.03089))
 #' write.latextable(df, s=3)
+#' @export
 write.latextable <- function(x, d=NA, s=NA, no.rounding=numeric(), file=''){
   float_rounding <- function(a){
     if (!is.na(d)) return(dp(a, digits=d))
@@ -734,6 +735,7 @@ CvM.test <- function(x,y){
     ret
 }
 
+#' EM algorithm
 #' @description EM algorithm with identity covariance matrix for all groups
 #' @param X data matrix of dimension n x p
 #' @param num_clusters number of clusters
