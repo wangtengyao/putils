@@ -56,6 +56,7 @@ The putils package provides personal utility functions.
 
 * printPercentage
 * println
+* write.latextable
 * visualise
 * snippet
 * find.first

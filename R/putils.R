@@ -43,6 +43,7 @@
 #' @section auxiliary functions:
 #' * printPercentage
 #' * println
+#' * write.latextable
 #' * visualise
 #' * snippet
 #' * find.first
@@ -393,6 +394,40 @@ println <- function(...){
   .Internal(cat(c(list(...), '\n'), file=stdout(), sep='', fill=FALSE, labels=NULL, append=FALSE))
 }
 
+#' Write Latex Table
+#' @param d if specified, all floats will be rounded to d decimal places
+#' @param s if specified (and d is unspecified), then all floats will be rounded
+#' to s signif
+#' @param no.rounding column indices not to apply rounding
+#' @param file filename for output, default to screen output
+#' @examples
+#' df <- data.frame(name=c('Alpha', 'Beta', 'Gamma', 'Delta'),
+#'                  size=c(100L,200L,300L,400L), score=c(23.091,19.978,1119.229, 0.03089))
+#' write.latextable(df, s=3)
+write.latextable <- function(x, d=NA, s=NA, no.rounding=numeric(), file=''){
+  float_rounding <- function(a){
+    if (!is.na(d)) return(dp(a, digits=d))
+    if (!is.na(s)) return(sf(a, digits=s))
+    return(a)
+  }
+  df <- x
+  # preprocess columns of df by type
+  for (i in seq_along(df)){
+    if (class(df[[i]])=='integer'){
+      df[[i]] <- paste0('$', as.character(df[[i]]), '$')
+    } else if (class(df[[i]])=='numeric' && !(i %in% no.rounding)){
+      df[[i]] <- paste0('$', sapply(df[[i]], float_rounding), '$')
+    } else {
+      df[[i]] <- as.character(df[[i]])
+    }
+  }
+  cat('\\begin{tabular}{', rep('c', ncol(df)), '}\n\\hline\\hline\n', sep='', file=file)
+  write.table(df, file=file, append=TRUE, quote=FALSE, sep=' & ', eol='\\\\\n',
+              na=' ', row.names=FALSE)
+  cat('\\hline\\hline\n\\end{tabular}\n', file=file, append=TRUE)
+}
+
+
 #' Print percentage
 #' @param ind a vector of for loop interator
 #' @param tot a vector of for loop lengths
@@ -509,7 +544,22 @@ sf_exp <- function(x, digits){
 #' @return a string
 #' @export
 sf <- function(x, digits){
-  formatC(signif(x, digits=digits), digits=digits, format="fg", flag="#")
+  str <- formatC(signif(x, digits=digits), digits=digits, format="fg", flag="#")
+  if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
+  return(str)
+}
+
+#' display decimal places nicely
+#' @details keep trailing zeros
+#' @param x a real number
+#' @param digits number of decimal places to keep
+#' @return a string
+#' @export
+dp <- function(x, digits){
+  digits <- floor(log10(x)) + 1 + digits
+  str <- formatC(round(x, dp), digits=digits, format="fg", flag = "#")
+  if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
+  return(str)
 }
 
 #' Simulation parameter data frame generation
@@ -682,6 +732,37 @@ CvM.test <- function(x,y){
     if (test.stat.normalised > 1.16786) signif <- '***'
     ret = list(t = test.stat.normalised, signif = signif)
     ret
+}
+
+#' @description EM algorithm with identity covariance matrix for all groups
+#' @param X data matrix of dimension n x p
+#' @param num_clusters number of clusters
+#' @param tol tolerance for convergence
+#' @return a list: mu_hat - the estimated cluster centroids and soft_label -
+#' the estimated cluster membership
+EM <- function(X, num_clusters, tol=1e-10){
+  # randomly initialise cluster centroids
+  mu_hat <- matrix(rnorm(ncol(X)*num_clusters), num_clusters)
+  sumX2 <- rowSums(X^2) # precompute squared length of X to speed up dist calc
+
+  # EM iterations
+  repeat{
+    # E-step: compute soft labels
+    # construct squared distance matrix between X and mu_hat
+    dist2 <- outer(sumX2, rowSums(mu_hat^2), '+') - 2 * X %*% t(mu_hat)
+    lik <- exp(-dist2/2)
+    soft_labels <- lik / rowSums(lik)
+
+    # M-step:update cluster centroids
+    old_mu_hat <- mu_hat
+    mu_hat <- t(soft_labels) %*% X / colSums(soft_labels)
+
+    if (sum((mu_hat - old_mu_hat)^2) < tol) break
+  }
+
+  return(list(mu_hat=mu_hat,
+              labels = apply(soft_labels, 1, which.max),
+              soft_labels=soft_labels))
 }
 
 ########## string operations ##########
