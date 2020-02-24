@@ -6,65 +6,77 @@
 #' \itemize{
 #'   \item expit
 #'   \item logit
+#'   \item lambertW
 #' }
-#' * expit
-#' * logit
-#' * lambertW
 #'
 #' @section matrices and vectors:
-#' * vector.norm
-#' * vector.normalise
-#' * vector.clip
-#' * vector.soft.thresh
-#' * vector.hard.thresh
-#' * vector.scramble
-#' * vector.cleanup
-#' * matrix.GramSchmidt
-#' * matrix.trace
-#' * matrix.rank
-#' * matrix.standardise
-#' * matrix.power
-#' * sinThetaLoss
-#' * powerMethod
-#' * QR
-#' * QL
-#' * offdiag
+#' \itemize{
+#'   \item vector.norm
+#'   \item vector.norm
+#'   \item vector.normalise
+#'   \item vector.clip
+#'   \item vector.soft.thresh
+#'   \item vector.hard.thresh
+#'   \item vector.scramble
+#'   \item vector.cleanup
+#'   \item matrix.GramSchmidt
+#'   \item matrix.trace
+#'   \item matrix.rank
+#'   \item matrix.standardise
+#'   \item matrix.power
+#'   \item sinThetaLoss
+#'   \item powerMethod
+#'   \item QR
+#'   \item QL
+#'   \item offdiag
+#' }
 #'
 #' @section random element generation:
-#' * random.rademacher
-#' * random.bernoulli
-#' * random.UnitVector
-#' * random.OrthogonalMatrix
-#' * random.WishartMatrix
-#' * random.WignerMatrix
-#' * random.psdMatrix
-#' * random.SymmetricMatrix
+#' \itemize{
+#'   \item random.rademacher
+#'   \item random.bernoulli
+#'   \item random.UnitVector
+#'   \item random.OrthogonalMatrix
+#'   \item random.WishartMatrix
+#'   \item random.WignerMatrix
+#'   \item random.psdMatrix
+#'   \item random.SymmetricMatrix
+#' }
 
 #' @section auxiliary functions:
-#' * printPercentage
-#' * println
-#' * write.latextable
-#' * visualise
-#' * snippet
-#' * find.first
-#' * find.last
-#' * sf
-#' * sf_exp
-#' * sim.params
-#' * show.params
-#' * '%=%'
+#' \itemize{
+#'   \item printPercentage
+#'   \item println
+#'   \item write.latextable
+#'   \item visualise
+#'   \item snippet
+#'   \item find.first
+#'   \item find.last
+#'   \item dp
+#'   \item sf
+#'   \item sf_exp
+#'   \item sim.params
+#'   \item show.params
+#'   \item '%=%'
+#' }
 
 #' @section statistical functions:
-#' * CvM.test
+#' \itemize{
+#'   \item CvM.test
+#' }
 #'
 #' @section string operations:
-#' * strlen
-#' * strstr
-#' * prefix
-#' * suffix
+#' \itemize{
+#'   \item strlen
+#'   \item strstr
+#'   \item prefix
+#'   \item suffix
+#' }
 #'
 #' @section NA handling:
-#' * setNA
+#' \itemize{
+#'   \item setNA
+#' }
 #'
 #' @docType package
 #' @name putils
