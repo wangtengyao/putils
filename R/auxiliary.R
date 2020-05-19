@@ -267,3 +267,87 @@ setNA <- function(v, a){
   v[is.na(v)] <- a;
   return(v)
 }
+
+#' matplotlib_palette
+#' return the first n palette colours
+#' @param n number of colours
+#' @param scheme palette scheme, one of 'default', 'bright' and 'rainbow'
+#' @param visualise if TRUE, a barplot of all colours will be shown
+#' @return a vector of hexadecimal colours
+#' @export
+matplotlib_palette <- function(n=0, scheme='default', visualise=FALSE){
+  default_palette <- c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd",
+                       "#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf",
+                       "#c5b0d5","#c49c94","#f7b6d2","#c7c7c7","#dbdb8d","#9edae5")
+  bright_palette <- c("#0e4897","#17813f","#1d99b4","#1f9ee8","#25ca7a","#471c7c",
+                      "#68c7ed","#6d4e98","#73af38","#7f1273","#9e1653","#ab0077",
+                      "#b01426","#b1b2b4","#c1d430","#cc0b24","#e10064","#e12653",
+                      "#e34e9d","#e46b07","#fbee29","#fcc125")
+  rainbow_palette <- c("#BF4D4D","#BF864D","#BFBF4D","#86BF4D","#4DBF4D",
+                       "#4DBF86","#4DBFBF","#4D86BF","#4D4DBF","#864DBF",
+                       "#BF4DBF","#BF4D86")
+  full_palette <- switch(scheme,
+                         'default' = default_palette,
+                         'bright' = bright_palette,
+                         'rainbow' = rainbow_palette)
+
+  if (n == 0) {
+    ret <- full_palette
+  } else {
+    reps <- ceiling(n / length(full_palette))
+    ret <- rep(full_palette, reps)[1:n]
+  }
+
+  if (visualise) barplot(rep(1, length(ret)), col=ret, axes=F, border=F,
+                         names.arg=seq_along(ret), cex.names=0.8)
+  return(ret)
+}
+
+
+#' Set minus: remove elements of small set from large set
+#' @param large the large set
+#' @param small the small set
+#' @return large set with elements of small set removed
+`%setminus%` <- function(large, small){
+  loc <- match(small, large)
+  loc <- loc[!is.na(loc)]
+  return(large[-loc])
+}
+
+
+#' Binary operators, add/subtract/multiply/divide a vector to a matrix row by
+#' row. i.e. each row of the matrix is added/subtracted/etc by the same vector
+#' @param x matrix or vector
+#' @param y matrix or vector (one of x and y needs to be a vector of length
+#' equal to the number of columns of the other)
+#' @name sweep_arithmetic
+NULL
+
+#' @rdname sweep_arithmetic
+#' @export
+`%_+_%` <- function(x, y) {
+  if (is.matrix(x) && !is.matrix(y)) return(t(t(x) + y))
+  if (is.matrix(y) && !is.matrix(x)) return(t(x + t(y)))
+  stop('two arguments must contain exactly one matrix and one vector')
+}
+#' @rdname sweep_arithmetic
+#' @export
+`%_-_%` <- function(x, y) {
+  if (is.matrix(x) && !is.matrix(y)) return(t(t(x) - y))
+  if (is.matrix(y) && !is.matrix(x)) return(t(x - t(y)))
+  stop('two arguments must contain exactly one matrix and one vector')
+}
+#' @rdname sweep_arithmetic
+#' @export
+`%_*_%` <- function(x, y) {
+  if (is.matrix(x) && !is.matrix(y)) return(t(t(x) * y))
+  if (is.matrix(y) && !is.matrix(x)) return(t(x * t(y)))
+  stop('two arguments must contain exactly one matrix and one vector')
+}
+#' @rdname sweep_arithmetic
+#' @export
+`%_/_%` <- function(x, y) {
+  if (is.matrix(x) && !is.matrix(y)) return(t(t(x) / y))
+  if (is.matrix(y) && !is.matrix(x)) return(t(x / t(y)))
+  stop('two arguments must contain exactly one matrix and one vector')
+}

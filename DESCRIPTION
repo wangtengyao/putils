@@ -1,7 +1,7 @@
 Package: putils
 Type: Package
 Title: Personal Utility Functions
-Version: 1.2.2
+Version: 1.2.3
 Date: 2019-07-01
 Author: Tengyao Wang
 Maintainer: Tengyao Wang <t.wang@ucl.ac.uk>
