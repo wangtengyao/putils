@@ -1,0 +1,269 @@
+############### Auxiliary functions ###############
+
+#' Print line
+#' @param ... R objects printable using cat()
+#' @details This is a wrapper function that prints R objects using cat() with
+#' no space separation and end with a newline character
+#' @export
+println <- function(...){
+  .Internal(cat(c(list(...), '\n'), file=stdout(), sep='', fill=FALSE, labels=NULL, append=FALSE))
+}
+
+#' Write Latex Table
+#' @param d if specified, all floats will be rounded to d decimal places
+#' @param s if specified (and d is unspecified), then all floats will be rounded
+#' to s signif
+#' @param no.rounding column indices not to apply rounding
+#' @param file filename for output, default to screen output
+#' @examples
+#' df <- data.frame(name=c('Alpha', 'Beta', 'Gamma', 'Delta'),
+#'                  size=c(100L,200L,300L,400L), score=c(23.091,19.978,1119.229, 0.03089))
+#' write.latextable(df, s=3)
+#' @export
+write.latextable <- function(x, d=NA, s=NA, no.rounding=numeric(), file=''){
+  float_rounding <- function(a){
+    if (!is.na(d)) return(dp(a, digits=d))
+    if (!is.na(s)) return(sf(a, digits=s))
+    return(a)
+  }
+  df <- x
+  # preprocess columns of df by type
+  for (i in seq_along(df)){
+    if (class(df[[i]])=='integer'){
+      df[[i]] <- paste0('$', as.character(df[[i]]), '$')
+    } else if (class(df[[i]])=='numeric' && !(i %in% no.rounding)){
+      df[[i]] <- paste0('$', sapply(df[[i]], float_rounding), '$')
+    } else {
+      df[[i]] <- as.character(df[[i]])
+    }
+  }
+  cat('\\begin{tabular}{', rep('c', ncol(df)), '}\n\\hline\\hline\n', sep='', file=file)
+  cat(paste0(colnames(df), collapse=' & '), '\\\\\n\\hline\n', sep='', file=file, append=TRUE)
+  write.table(df, file=file, append=TRUE, quote=FALSE, sep=' & ', eol='\\\\\n',
+              na=' ', row.names=FALSE, col.names=FALSE)
+  cat('\\hline\\hline\n\\end{tabular}\n', file=file, append=TRUE)
+}
+
+
+#' Print percentage
+#' @param ind a vector of for loop interator
+#' @param tot a vector of for loop lengths
+#' @return on screen output of percentage
+#' @export
+printPercentage <- function (ind, tot){
+    ind <- as.vector(ind); tot <- as.vector(tot)
+    if ((length(tot) > 1) & (length(ind) == 1)) {ind <- match(ind, tot); tot <- length(tot)}
+    len <- length(ind)
+    contrib <- rep(1,len)
+    if (len > 1) {
+        for (i in (len-1):1) contrib[i] <- contrib[i+1] * tot[i+1]
+    }
+    grand_tot <- contrib[1] * tot[1]
+    count <- (sum(contrib * (ind - 1)) + 1)
+    out <- ""
+    if (sum(ind-1)>0) out <- paste0(rep("\b", nchar(round((count-1)/grand_tot * 100))+1), collapse = "")
+    out <- paste0(out, round(count/grand_tot*100), "%")
+    if (identical(ind, tot)) out <- paste0(out, '\n')
+    cat(out)
+    return(NULL)
+}
+
+#' Visualise a matrix X
+#' @param X a matrix
+#' @param aspect.ratio if automatic, it will be calculated automatically to fit screen, otherwise, the actual dimension of the matrix will be used.
+#' @param axes whether to display axes
+#' @param frame.plot whether to draw a frame
+#' @return a color plot of matrix value magnitude
+#' @export
+visualise <- function(X, aspect.ratio = c('automatic', 'actual'), axes = FALSE, frame.plot = FALSE){
+    aspect.ratio = match.arg(aspect.ratio)
+    n = dim(X)[1]; p = dim(X)[2]
+    if (aspect.ratio == 'actual') {
+        image(t(X[n:1,]),asp=n/p, axes = axes, frame.plot = frame.plot)
+    }
+    else {
+        image(t(X[n:1,]), axes = axes, frame.plot = frame.plot)
+    }
+}
+
+#' Show snippet of a large vector/matrix
+#' @param A a vector, matrix or array
+#' @param nrow number of rows to show
+#' @param ncol number of columns to show, ignored for vectors
+#' @details Show the first nrow entries of a vector, the first nrow x ncol
+#' submatrix of a matrix. If A is an array, then randomly sample the third to
+#' the last indices and show the first nrow x ncol entries in that frame.
+#' @export
+snippet <- function(A, nrow=5, ncol=nrow){
+  if (is.vector(A)){
+    cat('Vector of length ', length(A), ', with leading entries:\n', sep='')
+    print(A[seq_len(min(length(A), nrow))])
+  } else if (is.matrix(A)) {
+    cat('Matrix with shape (', paste(as.character(dim(A)), collapse=', '),
+        '), with leading entries:\n', sep='')
+    print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
+  } else if (is.array(A)) {
+    dims <- dim(A); d <- length(dims);
+    shape <- paste(as.character(dim(A)), collapse=', ')
+    if (d == 1){
+      cat('1-d array of length ', dims, ', with leading entries:\n', sep='')
+      print(A[seq_len(min(length(A), nrow))])
+    } else if (d == 2){
+      cat('2-d array with shape (', shape, '), with leading entries:\n', sep='')
+      print(A[seq_len(min(nrow, nrow(A))), seq_len(min(ncol, ncol(A)))])
+    } else {
+      frames <- rep(0, d-2); starting_index <- 0
+      for (i in seq_len(d-2)){
+        frames[d-1-i] <- sample(dims[d+1-i], 1)
+        starting_index <- starting_index + prod(head(dims, d-i)) * (frames[d-1-i] - 1)
+      }
+      cat(d, '-d array with shape (', shape, '), with leading entries in frame [:, :, ',
+          paste(as.character(frames), collapse=', '), ']:\n', sep='')
+      M <- matrix(A[starting_index + seq_len(dims[1]*dims[2])], dims[1], dims[2])
+      print(M[seq_len(min(nrow, nrow(M))), seq_len(min(ncol, ncol(M)))])
+    }
+  } else {
+    stop('A need to be a vector or a matrix or an array.')
+  }
+}
+
+#' Find the location of first TRUE value in a boolean vector
+#' @param v a logical vector
+#' @return an integer denotating the location, return NA if not found.
+#' @export
+find.first <- function(v){
+  match(TRUE, v, nomatch = NA)
+}
+
+#' Find the location of final TRUE value in a boolean vector
+#' @param v a logical vector
+#' @return an integer denotating the location, return NA if not found.
+#' @export
+find.last <- function(v){
+  n <- length(v)
+  n + 1L - match(TRUE, rev(v), nomatch = NA)
+}
+
+#' display signif of exponentiated number nicely
+#' @details significant figure computed after subtracting 1. keep trailing zeros, not use scientific notation
+#' @param x a real number
+#' @param digits positive integer, number of significant figures
+#' @return a string
+#' @export
+sf_exp <- function(x, digits){
+  as.character(as.numeric(sf(x-1,digits))+1)
+}
+
+#' display signif nicely
+#' @details keep trailing zeros, not use scientific notation
+#' @param x a real number
+#' @param digits number of significant figures to keep
+#' @return a string
+#' @export
+sf <- function(x, digits){
+  str <- formatC(signif(x, digits=digits), digits=digits, format="fg", flag="#")
+  if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
+  return(str)
+}
+
+#' display decimal places nicely
+#' @details keep trailing zeros
+#' @param x a real number
+#' @param digits number of decimal places to keep
+#' @return a string
+#' @export
+dp <- function(x, digits){
+  digits <- floor(log10(x)) + 1 + digits
+  str <- formatC(round(x, dp), digits=digits, format="fg", flag = "#")
+  if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
+  return(str)
+}
+
+#' Simulation parameter data frame generation
+#' @description  create a dataframe of all possible parameter combinations in lexicographic order (if tags are supplied, use tag for column names)
+#' @param ... each argument should be of the form of tag = vector, meaning the variable named 'tag' takes values in 'vector'.
+#' @details A sample usage is sim.params(tag1 = vec1, tag2 = vec2, tag3 = vec3).
+#' @export
+sim.params <- function(...){
+  x <- list(...)
+  n <- length(x)
+  vnames <- names(x); no.vn <- !nzchar(vnames)
+  vnames[no.vn] <- paste0('Var', seq_len(n))[no.vn]
+  df <- expand.grid(rev(x))[,rev(seq_len(n))]
+  colnames(df) <- vnames
+  return(df)
+}
+
+#' Show parameter values
+#' @description Print out parameters in a list in a nice format
+#' @param x a list of parameters
+#' @export
+show.params <- function(x){
+  n <- length(x)
+  vnames <- names(x); no.vn <- !nzchar(vnames)
+  vnames[no.vn] <- paste0('Var', seq_len(n))[no.vn]
+  names(x) <- vnames
+  str <- ""
+  for (i in seq_len(n)){
+    str <- paste(str, vnames[i], '=', paste(x[[i]]), ',')
+  }
+  substr(str, 2, nchar(str)-2)
+}
+
+#' Multiple assignment
+#' @description assign multiple items in a list on RHS to multiple items in a list on LHS
+#' @details A sample usage is  bunch(a,b,c) %=% list('hello', 123, list('apple','orange')), or
+#' bunch(a,b,c) %=% 1:3
+#' @param l left side list, enclosed by the \code{bunch} function
+#' @param r right side list
+#' @export
+
+'%=%' <- function(l, r) UseMethod('%=%')  # Generic form
+
+# Binary Operator
+'%=%.lbunch' = function(l, r) {
+  Envir = as.environment(-1)
+  if (length(r) > length(l))
+    warning("RHS has more args than LHS. Only first", length(l), "used.")
+  if (length(l) > length(r))  {
+    warning("LHS has more args than RHS. RHS will be repeated.")
+    r <- extendToMatch(r, l)
+  }
+  for (i in seq_along(l)) {
+    do.call('<-', list(l[[i]], r[[i]]), envir=Envir)
+  }
+}
+
+# Used if LHS is larger than RHS
+extendToMatch <- function(source, destin) {
+  s <- length(source)
+  d <- length(destin)
+
+  # Assume that destin is a length when it is a single number and source is not
+  if(d==1 && s>1 && !is.null(as.numeric(destin)))
+    d <- destin
+
+  dif <- d - s
+  if (dif > 0) {
+    source <- rep(source, ceiling(d/s))[1:d]
+  }
+  return (source)
+}
+
+# Grouping the left hand side
+bunch = function(...) {
+  List <- as.list(substitute(list(...)))[-1L]
+  class(List) <- 'lbunch'
+  return(List)
+}
+
+
+#' Change all NA values in v to a
+#' @param v a vector
+#' @param a target value
+#' @return updated vector
+#' @export
+setNA <- function(v, a){
+  v[is.na(v)] <- a;
+  return(v)
+}
