@@ -351,3 +351,13 @@ NULL
   if (is.matrix(y) && !is.matrix(x)) return(t(x / t(y)))
   stop('two arguments must contain exactly one matrix and one vector')
 }
+
+#' Check whether input is string
+#' @param x
+#' @return boolean for whether x is string
+#' @export
+isString <- function(x){
+  is.character(x) && (length(x) == 1)
+}
+
+

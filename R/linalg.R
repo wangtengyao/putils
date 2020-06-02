@@ -9,10 +9,18 @@
 #' @export
 vector.norm <- function(v, q = 2, na.rm = FALSE){
     if (na.rm) v <- na.omit(v)
-    if (q == Inf) max(abs(v))
-    else if (q > 0) (sum(abs(v)^q))^(1/q)
-    else if (q == 0) sum(v!=0)
-    else NaN
+    M <- max(abs(v))
+    if (M == 0) return(0) else v <- v/M
+    if (q == Inf) {
+      nm <- max(abs(v))
+    } else if (q > 0) {
+      nm <- (sum(abs(v)^q))^(1/q)
+    } else if (q == 0) {
+      nm <- sum(v!=0)
+    } else {
+      return(NaN)
+    }
+    return(nm * M)
 }
 
 #' Normalise a vector
