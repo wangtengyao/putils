@@ -294,7 +294,7 @@ pseudoinverse <- function(M, tolerance = 1e-10){
   u <- tmp$u; d <- tmp$d; v <- tmp$v
   filter <- abs(d) < tolerance
   d[filter] <- 0; d[!filter] <- 1/d[!filter]
-  return(v%*%diag(d)%*%t(u))
+  return(v%*%diag(d,nrow=length(d))%*%t(u))
 }
 
 #' Column maximum
