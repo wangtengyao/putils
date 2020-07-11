@@ -2,7 +2,7 @@
 % Please edit documentation in R/linalg.R
 \name{matrix.power}
 \alias{matrix.power}
-\title{Compute matrix square-root of a symmetric matrix}
+\title{Compute matrix power of a symmetric matrix}
 \usage{
 matrix.power(A, power, pseudoinverse = TRUE)
 }
@@ -14,5 +14,5 @@ matrix.power(A, power, pseudoinverse = TRUE)
 \item{pseudoinverse}{whether to use pseudoinverse if power is negative}
 }
 \description{
-Compute matrix square-root of a symmetric matrix
+Compute matrix power of a symmetric matrix
 }
