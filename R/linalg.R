@@ -23,6 +23,42 @@ vector.norm <- function(v, q = 2, na.rm = FALSE){
     return(nm * M)
 }
 
+#' Norm of a matrix
+#' @param M real matrix
+#' @param norm name of matrix norm
+#' @param type type of matrix norm
+#' @param pnorms indexed by p in the same type
+#' @param q norms indexed by q in the same type
+matrix.norm <- function(M, norm='operator', type=c('operator', 'entrywise', 'Schatten', 'rowcol', 'colrow'), p=2, q=p){
+  if (type == 'operator'){
+    if (p==2 && q==2) {
+      type<-'Schatten'; p<-Inf
+    } else if (p==1) {
+      type<-'colrow'
+    } else if (q==Inf){
+      type<-'rowcol'; p<-1/(1-1/p)
+    } else {
+      print('I do not know how to compute this norm.')
+      return(NA)
+    }
+  }
+  if (type == 'entrywise') return(vector.norm(M, p))
+  if (type == 'Schatten') return(vector.norm(svd(M)$d, p))
+  if (type == 'rowcol') return(vector.norm(apply(M, 1, function(v) vector.norm(v,p)), q))
+  if (type == 'colrow') return(vector.norm(apply(M, 2, function(v) vector.norm(v,p)), q))
+
+  if (norm == 'operator'){
+    return(vector.norm(svd(M)$d, Inf))
+  } else if (norm == 'Frobenius'){
+    return(vector.norm(M, 2))
+  } else if (norm == 'nuclear'){
+    return(vector.norm(svd(M)$d, 1))
+  }
+
+  stop('norm type not recognised')
+}
+
+
 #' Normalise a vector
 #' @param v a vector of real numbers
 #' @param q a nonnegative real number or Inf
@@ -218,7 +254,7 @@ offdiag <- function(A, as.vector=FALSE){
   }
 }
 
-#' Compute matrix square-root of a symmetric matrix
+#' Compute matrix power of a symmetric matrix
 #' @param A a square matrix
 #' @param power power exponent
 #' @param pseudoinverse whether to use pseudoinverse if power is negative
@@ -245,4 +281,44 @@ matrix.power <- function(A, power, pseudoinverse=TRUE){
   } else {
     return(evecs %*% diag(as.complex(evals)^power, nrow=nrow(A)) %*% t(evecs))
   }
+}
+
+#' Compute Moore-Penrose pseudoinverse of a real rectangular matrix
+#' @param M real matrix to be inverted
+#' @param tolerance singular values below this level are treated as 0
+#' @return matrix M.inv satisfying M %*% M.inv %*% M = M and M.inv %*% M %*% M.inv = M.inv
+pseudoinverse <- function(M, tolerance = 1e-10){
+  tmp <- svd(M)
+  u <- tmp$u; d <- tmp$d; v <- tmp$v
+  filter <- abs(d) < tolerance
+  d[filter] <- 0; d[!filter] <- 1/d[!filter]
+  return(v%*%diag(d)%*%t(u))
+}
+
+#' Column maximum
+#' @param M matrix
+#' @return a vector of column maxima
+colMax <- function(M){
+  apply(M, 2, max)
+}
+
+#' Column minimum
+#' @param M matrix
+#' @return a vector of column maxima
+colMin <- function(M){
+  apply(M, 2, min)
+}
+
+#' Row maximum
+#' @param M matrix
+#' @return a vector of column maxima
+rowMax <- function(M){
+  apply(M, 1, max)
+}
+
+#' Row minimum
+#' @param M matrix
+#' @return a vector of column maxima
+rowMin <- function(M){
+  apply(M, 1, min)
 }
