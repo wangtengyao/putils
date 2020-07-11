@@ -29,6 +29,7 @@ vector.norm <- function(v, q = 2, na.rm = FALSE){
 #' @param type type of matrix norm
 #' @param pnorms indexed by p in the same type
 #' @param q norms indexed by q in the same type
+#' @export
 matrix.norm <- function(M, norm='operator', type=c('operator', 'entrywise', 'Schatten', 'rowcol', 'colrow'), p=2, q=p){
   if (type == 'operator'){
     if (p==2 && q==2) {
@@ -287,6 +288,7 @@ matrix.power <- function(A, power, pseudoinverse=TRUE){
 #' @param M real matrix to be inverted
 #' @param tolerance singular values below this level are treated as 0
 #' @return matrix M.inv satisfying M %*% M.inv %*% M = M and M.inv %*% M %*% M.inv = M.inv
+#' @export
 pseudoinverse <- function(M, tolerance = 1e-10){
   tmp <- svd(M)
   u <- tmp$u; d <- tmp$d; v <- tmp$v
@@ -298,6 +300,7 @@ pseudoinverse <- function(M, tolerance = 1e-10){
 #' Column maximum
 #' @param M matrix
 #' @return a vector of column maxima
+#' @export
 colMax <- function(M){
   apply(M, 2, max)
 }
@@ -305,6 +308,7 @@ colMax <- function(M){
 #' Column minimum
 #' @param M matrix
 #' @return a vector of column maxima
+#' @export
 colMin <- function(M){
   apply(M, 2, min)
 }
@@ -312,6 +316,7 @@ colMin <- function(M){
 #' Row maximum
 #' @param M matrix
 #' @return a vector of column maxima
+#' @export
 rowMax <- function(M){
   apply(M, 1, max)
 }
@@ -319,6 +324,7 @@ rowMax <- function(M){
 #' Row minimum
 #' @param M matrix
 #' @return a vector of column maxima
+#' @export
 rowMin <- function(M){
   apply(M, 1, min)
 }
