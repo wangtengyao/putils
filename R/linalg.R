@@ -30,7 +30,8 @@ vector.norm <- function(v, q = 2, na.rm = FALSE){
 #' @param pnorms indexed by p in the same type
 #' @param q norms indexed by q in the same type
 #' @export
-matrix.norm <- function(M, norm='operator', type=c('operator', 'entrywise', 'Schatten', 'rowcol', 'colrow'), p=2, q=p){
+matrix.norm <- function(M, type=c('operator', 'entrywise', 'Schatten', 'rowcol', 'colrow'), p=2, q=p){
+  if (length(type) > 1) type <- type[1]
   if (type == 'operator'){
     if (p==2 && q==2) {
       type<-'Schatten'; p<-Inf
@@ -43,18 +44,13 @@ matrix.norm <- function(M, norm='operator', type=c('operator', 'entrywise', 'Sch
       return(NA)
     }
   }
+  if (type == 'Frobenius') {type <- 'entrywise'; p <- 2}
+  if (type == 'nuclear') {type <- 'Schatten'; p <- 1}
+
   if (type == 'entrywise') return(vector.norm(M, p))
   if (type == 'Schatten') return(vector.norm(svd(M)$d, p))
   if (type == 'rowcol') return(vector.norm(apply(M, 1, function(v) vector.norm(v,p)), q))
   if (type == 'colrow') return(vector.norm(apply(M, 2, function(v) vector.norm(v,p)), q))
-
-  if (norm == 'operator'){
-    return(vector.norm(svd(M)$d, Inf))
-  } else if (norm == 'Frobenius'){
-    return(vector.norm(M, 2))
-  } else if (norm == 'nuclear'){
-    return(vector.norm(svd(M)$d, 1))
-  }
 
   stop('norm type not recognised')
 }

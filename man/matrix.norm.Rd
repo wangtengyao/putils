@@ -4,17 +4,17 @@
 \alias{matrix.norm}
 \title{Norm of a matrix}
 \usage{
-matrix.norm(M, norm = "operator", type = c("operator", "entrywise",
-  "Schatten", "rowcol", "colrow"), p = 2, q = p)
+matrix.norm(M, type = c("operator", "entrywise", "Schatten", "rowcol",
+  "colrow"), p = 2, q = p)
 }
 \arguments{
 \item{M}{real matrix}
 
-\item{norm}{name of matrix norm}
-
 \item{type}{type of matrix norm}
 
 \item{q}{norms indexed by q in the same type}
+
+\item{norm}{name of matrix norm}
 
 \item{pnorms}{indexed by p in the same type}
 }

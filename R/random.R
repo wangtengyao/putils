@@ -23,6 +23,14 @@ random.UnitVector <- function(n){
     v/vector.norm(v)
 }
 
+#' Generate a Gaussian random matrix
+#' @param nrow number of rows
+#' @param ncol number of columns
+#' @export
+random.GaussianMatrix <- function(nrow, ncol=nrow){
+    matrix(rnorm(nrow*ncol),nrow,ncol)
+}
+
 #' Generate a random nxn orthogonal matrix
 #' @param n dimension
 #' @export
