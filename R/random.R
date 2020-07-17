@@ -31,11 +31,13 @@ random.GaussianMatrix <- function(nrow, ncol=nrow){
     matrix(rnorm(nrow*ncol),nrow,ncol)
 }
 
-#' Generate a random nxn orthogonal matrix
-#' @param n dimension
+#' Generate a random matrix with orthonormal columns
+#' @param nrow number of rows
+#' @param ncol number of columns (should be no larger than nrow)
 #' @export
-random.OrthogonalMatrix <- function(n){
-    A = matrix(rnorm(n*n),n,n)
+random.OrthogonalMatrix <- function(nrow, ncol=nrow){
+    stopifnot(nrow >= ncol)
+    A = matrix(rnorm(nrow*ncol),nrow,ncol)
     qr.Q(qr(A))
 }
 

@@ -2,13 +2,15 @@
 % Please edit documentation in R/random.R
 \name{random.OrthogonalMatrix}
 \alias{random.OrthogonalMatrix}
-\title{Generate a random nxn orthogonal matrix}
+\title{Generate a random matrix with orthonormal columns}
 \usage{
-random.OrthogonalMatrix(n)
+random.OrthogonalMatrix(nrow, ncol = nrow)
 }
 \arguments{
-\item{n}{dimension}
+\item{nrow}{number of rows}
+
+\item{ncol}{number of columns (should be no larger than nrow)}
 }
 \description{
-Generate a random nxn orthogonal matrix
+Generate a random matrix with orthonormal columns
 }
