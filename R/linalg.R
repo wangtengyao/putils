@@ -332,6 +332,7 @@ rowMin <- function(M){
 blockdiag <- function(...){
   args <- list(...)
   if (is.list(args[[1]])) args <- args[[1]]
+  for (i in 1:length(args)) args[[i]] <- as.matrix(args[[i]])
   dims <- sapply(args, dim)
   M <- matrix(0, rowSums(dims)[1], rowSums(dims)[2])
   tmp <- rbind(0, apply(dims, 1, cumsum))
