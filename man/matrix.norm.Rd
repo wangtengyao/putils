@@ -4,8 +4,12 @@
 \alias{matrix.norm}
 \title{Norm of a matrix}
 \usage{
-matrix.norm(M, type = c("operator", "entrywise", "Schatten", "rowcol",
-  "colrow"), p = 2, q = p)
+matrix.norm(
+  M,
+  type = c("operator", "entrywise", "Schatten", "rowcol", "colrow"),
+  p = 2,
+  q = p
+)
 }
 \arguments{
 \item{M}{real matrix}

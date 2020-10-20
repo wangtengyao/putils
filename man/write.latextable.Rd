@@ -4,8 +4,7 @@
 \alias{write.latextable}
 \title{Write Latex Table}
 \usage{
-write.latextable(x, d = NA, s = NA, no.rounding = numeric(),
-  file = "")
+write.latextable(x, d = NA, s = NA, no.rounding = numeric(), file = "")
 }
 \arguments{
 \item{d}{if specified, all floats will be rounded to d decimal places}

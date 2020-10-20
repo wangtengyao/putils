@@ -324,3 +324,19 @@ rowMax <- function(M){
 rowMin <- function(M){
   apply(M, 1, min)
 }
+
+#' Block diagonal matrix
+#' @param ... matrices to construct a block diagonal matrix, can be a list also
+#' @return a block diagonal matrix
+#' @export
+blockdiag <- function(...){
+  args <- list(...)
+  if (is.list(args[[1]])) args <- args[[1]]
+  dims <- sapply(args, dim)
+  M <- matrix(0, rowSums(dims)[1], rowSums(dims)[2])
+  tmp <- rbind(0, apply(dims, 1, cumsum))
+  for (i in 1:(nrow(tmp)-1)){
+    M[(tmp[i,1]+1):tmp[i+1,1], (tmp[i,2]+1):tmp[i+1,2]] <- args[[i]]
+  }
+  return(M)
+}

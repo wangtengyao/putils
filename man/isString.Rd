@@ -6,6 +6,9 @@
 \usage{
 isString(x)
 }
+\arguments{
+\item{x}{object}
+}
 \value{
 boolean for whether x is string
 }

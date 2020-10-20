@@ -353,7 +353,7 @@ NULL
 }
 
 #' Check whether input is string
-#' @param x
+#' @param x object
 #' @return boolean for whether x is string
 #' @export
 isString <- function(x){
