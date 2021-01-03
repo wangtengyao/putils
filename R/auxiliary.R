@@ -311,6 +311,7 @@ matplotlib_palette <- function(n=0, scheme='default', visualise=FALSE){
 #' @param color1 color 1 in hexadecimal
 #' @param color2 color 2 in hexadecimal
 #' @param lambda interpolation, if equal to 0, return color1, if 1 return color2
+#' @export
 mix_color <- function(color1, color2, lambda=0.5){
   R1 <- strtoi(paste0('0x', substr(color1, 2, 3)))
   G1 <- strtoi(paste0('0x', substr(color1, 4, 5)))
