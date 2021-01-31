@@ -9,6 +9,9 @@ bunch(...)
 \arguments{
 \item{...}{variables to be bunched}
 }
+\value{
+a list of variable names
+}
 \description{
-Grouping the left hand side in %=%
+bunch multiple items together for %=%
 }
