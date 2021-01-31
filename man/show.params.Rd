@@ -4,11 +4,11 @@
 \alias{show.params}
 \title{Show parameter values}
 \usage{
-show.params(x)
+show.params(...)
 }
 \arguments{
-\item{x}{a list of parameters}
+\item{x}{a vector of parameters}
 }
 \description{
-Print out parameters in a list in a nice format
+Print out parameters in a vector in a nice format
 }
