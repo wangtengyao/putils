@@ -2,7 +2,7 @@
 % Please edit documentation in R/auxiliary.R
 \name{bunch}
 \alias{bunch}
-\title{Grouping the left hand side in %=%}
+\title{Grouping the left hand side in multiple assignment}
 \usage{
 bunch(...)
 }
@@ -13,5 +13,5 @@ bunch(...)
 a list of variable names
 }
 \description{
-bunch multiple items together for %=%
+bunch multiple items together for multiple assignment
 }

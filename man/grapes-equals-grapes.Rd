@@ -15,6 +15,5 @@ l \%=\% r
 assign multiple items in a list on RHS to multiple items in a list on LHS
 }
 \details{
-A sample usage is  bunch(a,b,c) %=% list('hello', 123, list('apple','orange')), or
-bunch(a,b,c) %=% 1:3
+
 }
