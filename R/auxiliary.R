@@ -195,20 +195,15 @@ sim.params <- function(...){
 }
 
 #' Show parameter values
-#' @description Print out parameters in a list in a nice format
-#' @param x a list of parameters
+#' @description Print out parameters in a vector in a nice format
+#' @param x a vector of parameters
 #' @export
-show.params <- function(x){
-  n <- length(x)
-  vnames <- names(x); no.vn <- !nzchar(vnames)
-  vnames[no.vn] <- paste0('Var', seq_len(n))[no.vn]
-  names(x) <- vnames
-  str <- ""
-  for (i in seq_len(n)){
-    str <- paste(str, vnames[i], '=', paste(x[[i]]), ',')
-  }
-  substr(str, 2, nchar(str)-2)
+show.params <- function(...) {
+  names <- as.list(substitute(list(...)))[-1L]
+  vals <- list(...)
+  paste(paste0(names, ' = ', vals), collapse=', ')
 }
+
 
 #' Multiple assignment
 #' @description assign multiple items in a list on RHS to multiple items in a list on LHS
@@ -250,7 +245,10 @@ extendToMatch <- function(source, destin) {
   return (source)
 }
 
-# Grouping the left hand side
+#' Grouping the left hand side in %=%
+#' @param ... variables to be bunched
+#' @export
+
 bunch = function(...) {
   List <- as.list(substitute(list(...)))[-1L]
   class(List) <- 'lbunch'
