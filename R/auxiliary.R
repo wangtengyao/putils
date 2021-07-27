@@ -207,12 +207,11 @@ show.params <- function(...) {
 
 #' Multiple assignment
 #' @description assign multiple items in a list on RHS to multiple items in a list on LHS
-#' @details A sample usage is  bunch(a,b,c) %=% list('hello', 123, list('apple','orange')), or
-#' bunch(a,b,c) %=% 1:3
+#' @details A sample usage is  \code{bunch(a,b,c) %=% list('hello', 123, list('apple','orange'))}, or
+#' \code{bunch(a,b,c) %=% 1:3}
 #' @param l left side list, enclosed by the \code{bunch} function
 #' @param r right side list
 #' @export
-
 '%=%' <- function(l, r) UseMethod('%=%')  # Generic form
 
 # Binary Operator
@@ -245,10 +244,11 @@ extendToMatch <- function(source, destin) {
   return (source)
 }
 
-#' Grouping the left hand side in %=%
+#' Grouping the left hand side in multiple assignment
+#' @description bunch multiple items together for multiple assignment
 #' @param ... variables to be bunched
+#' @return a list of variable names
 #' @export
-
 bunch = function(...) {
   List <- as.list(substitute(list(...)))[-1L]
   class(List) <- 'lbunch'

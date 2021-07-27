@@ -341,3 +341,24 @@ blockdiag <- function(...){
   }
   return(M)
 }
+
+#' Repeat a vector along another vector to achieve equal length
+#' @param x vector to be repeated
+#' @param y vector whose length sholud be matched
+#' @export
+rep_along <- function(x, y){
+  tmp <- rep(x, ceiling(length(y) / length(x)))
+  head(tmp, length(y))
+}
+
+#' Sort data frame by columns
+#' @param x a data frame
+#' @param by vector of column indices, sort by first index first, ties are broken using second index etc.
+#' @export
+sort.data.frame <- function(x, by=1, decreasing=FALSE){
+  if (length(decreasing==1)) decreasing <- rep_along(decreasing, by)
+  for (j in rev(by)){
+    x <- x[order(x[, j], decreasing=decreasing[match(j, by)]), ]
+  }
+  return(x)
+}
