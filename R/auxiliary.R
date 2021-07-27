@@ -214,7 +214,9 @@ show.params <- function(...) {
 #' @export
 '%=%' <- function(l, r) UseMethod('%=%')  # Generic form
 
-# Binary Operator
+#' Binary Operator
+#' @description method for lbunch
+#' @export
 '%=%.lbunch' = function(l, r) {
   Envir = as.environment(-1)
   if (length(r) > length(l))
