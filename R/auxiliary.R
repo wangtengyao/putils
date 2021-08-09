@@ -207,8 +207,7 @@ show.params <- function(...) {
 
 #' Multiple assignment
 #' @description assign multiple items in a list on RHS to multiple items in a list on LHS
-#' @details A sample usage is  \code{bunch(a,b,c) %=% list('hello', 123, list('apple','orange'))}, or
-#' \code{bunch(a,b,c) %=% 1:3}
+#' @details A sample usage is  \code{bunch(a,b,c) %=% list('hello', 123, list('apple', 'orange'))}, or \code{bunch(a,b,c) %=% 1:3}
 #' @param l left side list, enclosed by the \code{bunch} function
 #' @param r right side list
 #' @export
@@ -382,4 +381,74 @@ isString <- function(x){
   is.character(x) && (length(x) == 1)
 }
 
+#' assign colours to distinct values of a vector
+#' @param v vector to be converted to colours
+#' @return a vector of colours of equal length with two attributes: 'palette' giving the palette used for all distinct colours; 'uniq': vector of distinct values in v
+#' @export
+colorise <- function(v){
+  uniq <- unique(v)
+  ind <- match(v, uniq)
+  palet <- matplotlib_palette(length(uniq))
+  col <- palet[ind]
+  attr(col, 'palette') <- palet
+  attr(col, 'legend') <- uniq
+  return(col)
+}
 
+#' assign line types to distinct values of a vector
+#' @param v vector to be converted to line types / categories
+#' @return a vector of line types of equal length with two attributes: 'lty' giving a vector of all line types used; 'uniq': vector of distinct values in v
+#' @export
+stylise <- function(v){
+  uniq <- unique(v)
+  ind <- match(v, uniq)
+  lty <- seq_along(uniq)
+  style <- lty[ind]
+  attr(style, 'lty') <- lty
+  attr(style, 'legend') <- uniq
+  return(style)
+}
+
+
+
+#' generate a plot from a data frame with color and line type set by specific columns
+#' @param x column name for the x values, needs to be a string
+#' @param y column name for the y values, needs to be a string
+#' @param col column name for the colour attributes, can be of any type, distinct values are represented by distinct colours
+#' @param style column name for the line type attributes, can be of any type, distinct values are represented by distinct line types
+#' @param data data frame
+#' @param legend.position where to place the legend
+#' @param ... other plotting parameters
+#' @export
+myplot <- function(x, y, col=NULL, style=NULL, data=.GlobalEnv, legend.position='topright', ...){
+  xval <- data[[x]]
+  yval <- data[[y]]
+  legend.col <- legend.lty <- legend.txt <- c()
+
+  if (is.null(col)) {
+    plot.col <- legend.col <- 'black'
+  } else {
+    plot.col <- colorise(data[[col]])
+    legend.col <- attr(plot.col, 'palet')
+    legend.txt <- paste(col, '=', attr(plot.col, 'legend'))
+  }
+  if (is.null(style)){
+    plot.lty <- legend.lty <- 1
+  } else {
+    plot.lty <- stylise(data[[style]])
+    legend.lty <- attr(plot.lty, 'lty')
+    legend.txt <- c(legend.txt, paste(style, '=', attr(plot.lty, 'legend')))
+  }
+  if (!is.null(col) && !is.null(style)){
+    tmp1 <- legend.col; tmp2 <- legend.lty
+    legend.col <- c(tmp1, rep_along('black', tmp2))
+    legend.lty <- c(rep_along(1, tmp1), tmp2)
+  }
+  tmp <- data.frame(xval=xval, yval=yval, col=plot.col, lty=plot.lty)
+  agg <- aggregate(cbind(xval, yval) ~ col + lty, data=tmp, FUN=list)
+  plot(range(xval), range(yval), xlab=x, ylab=y, type='n', ...)
+  for (i in 1:nrow(agg)){
+    points(agg[i, 3][[1]], agg[i, 4][[1]], col=agg[i, 1], lty=agg[i, 2], type='b', ...)
+  }
+  legend(legend.position, legend=legend.txt, col=legend.col, lty=legend.lty)
+}
