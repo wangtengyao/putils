@@ -174,7 +174,7 @@ sf <- function(x, digits){
 #' @export
 dp <- function(x, digits){
   digits <- floor(log10(x)) + 1 + digits
-  str <- formatC(round(x, dp), digits=digits, format="fg", flag = "#")
+  str <- formatC(round(x, digits), digits=digits, format="fg", flag = "#")
   if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
   return(str)
 }
