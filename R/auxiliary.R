@@ -37,6 +37,7 @@ write.latextable <- function(x, d=NA, s=NA, no.rounding=numeric(), file=''){
       df[[i]] <- as.character(df[[i]])
     }
   }
+
   cat('\\begin{tabular}{', rep('c', ncol(df)), '}\n\\hline\\hline\n', sep='', file=file)
   cat(paste0(colnames(df), collapse=' & '), '\\\\\n\\hline\n', sep='', file=file, append=TRUE)
   write.table(df, file=file, append=TRUE, quote=FALSE, sep=' & ', eol='\\\\\n',
