@@ -4,13 +4,33 @@
 \alias{write.latextable}
 \title{Write Latex Table}
 \usage{
-write.latextable(x, d = NA, s = NA, no.rounding = numeric(), file = "")
+write.latextable(
+  x,
+  d = NA,
+  s = NA,
+  se = NULL,
+  se.d = NA,
+  se.s = NA,
+  se.format = "X_{(SE)}",
+  no.rounding = numeric(),
+  file = ""
+)
 }
 \arguments{
+\item{x}{dataframe to be converted into a latex table}
+
 \item{d}{if specified, all floats will be rounded to d decimal places}
 
 \item{s}{if specified (and d is unspecified), then all floats will be rounded
 to s signif}
+
+\item{se}{a dataframe of standard errors, need not be the same dimension as x, columns of x and se will be matched by column names}
+
+\item{se.d}{same as d, but for dataframe se}
+
+\item{se.s}{same as s, but for dataframe se}
+
+\item{se.format}{how values and standard errors are combined, use X as a placeholder for the numeric value, and SE as a placeholder for the standard error in the latex formula.}
 
 \item{no.rounding}{column indices not to apply rounding}
 

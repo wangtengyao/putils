@@ -7,12 +7,12 @@
 dp(x, digits)
 }
 \arguments{
-\item{x}{a real number}
+\item{x}{a real number (or a vector of real numbers)}
 
 \item{digits}{number of decimal places to keep}
 }
 \value{
-a string
+a string (or a vector of strings)
 }
 \description{
 display decimal places nicely

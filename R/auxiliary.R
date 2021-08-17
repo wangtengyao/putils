@@ -10,9 +10,14 @@ println <- function(...){
 }
 
 #' Write Latex Table
+#' @param x dataframe to be converted into a latex table
 #' @param d if specified, all floats will be rounded to d decimal places
 #' @param s if specified (and d is unspecified), then all floats will be rounded
 #' to s signif
+#' @param se a dataframe of standard errors, need not be the same dimension as x, columns of x and se will be matched by column names
+#' @param se.d same as d, but for dataframe se
+#' @param se.s same as s, but for dataframe se
+#' @param se.format how values and standard errors are combined, use X as a placeholder for the numeric value, and SE as a placeholder for the standard error in the latex formula.
 #' @param no.rounding column indices not to apply rounding
 #' @param file filename for output, default to screen output
 #' @examples
@@ -20,19 +25,45 @@ println <- function(...){
 #'                  size=c(100L,200L,300L,400L), score=c(23.091,19.978,1119.229, 0.03089))
 #' write.latextable(df, s=3)
 #' @export
-write.latextable <- function(x, d=NA, s=NA, no.rounding=numeric(), file=''){
-  float_rounding <- function(a){
-    if (!is.na(d)) return(dp(a, digits=d))
-    if (!is.na(s)) return(sf(a, digits=s))
-    return(a)
-  }
+write.latextable <- function(x, d=NA, s=NA, se=NULL, se.d=NA, se.s=NA, se.format='X_{(SE)}', no.rounding=numeric(), file=''){
+  if (length(d) == 1) d <- rep(d, ncol(x))
+  if (length(s) == 1) s <- rep(s, ncol(x))
+  names(d) <- names(s) <- names(x)
+  if (length(se.d) == 1) se.d <- rep(se.d, ncol(x))
+  if (length(se.s) == 1) se.s <- rep(se.s, ncol(x))
+  names(se.d) <- names(se.s) <- names(se)
+  if (is.numeric(no.rounding)) no.rounding <- names(x)[no.rounding]
+
   df <- x
   # preprocess columns of df by type
-  for (i in seq_along(df)){
+  for (i in names(x)){
     if (class(df[[i]])=='integer'){
       df[[i]] <- paste0('$', as.character(df[[i]]), '$')
-    } else if (class(df[[i]])=='numeric' && !(i %in% no.rounding)){
-      df[[i]] <- paste0('$', sapply(df[[i]], float_rounding), '$')
+    } else if (class(df[[i]])=='numeric'){
+      if (i %in% no.rounding || (is.na(d[[i]]) && is.na(s[[i]]))){
+        tmp1 <- as.character(x[[i]])
+      } else if (!is.na(d[[i]])) {
+        tmp1 <- dp(x[[i]], digits=d[[i]])
+      } else {
+        tmp1 <- sf(x[[i]], digits=s[[i]])
+      }
+
+      if (!is.numeric(se[[i]]) || (is.na(se.d[[i]]) && is.na(se.s[[i]]))) {
+        tmp2 <- NULL
+        df[[i]] <- paste0('$', tmp1, '$')
+      } else {
+        if (i %in% no.rounding) {
+          tmp2 <- as.character(se[[i]])
+        } else if (!is.na(se.d[i])) {
+          tmp2 <- dp(se[[i]], digits=se.d[[i]])
+        } else {
+          tmp2 <- sf(se[[i]], digits=se.s[[i]])
+        }
+        format.str <- strsplit(se.format, 'X|SE')[[1]]
+        df[[i]] <- paste0('$', format.str[1], tmp1, format.str[2], tmp2,
+                          format.str[3], '$')
+      }
+
     } else {
       df[[i]] <- as.character(df[[i]])
     }
@@ -162,21 +193,27 @@ sf_exp <- function(x, digits){
 #' @return a string
 #' @export
 sf <- function(x, digits){
-  str <- formatC(signif(x, digits=digits), digits=digits, format="fg", flag="#")
-  if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
+  str <- sapply(x, function(y){
+    formatC(signif(y, digits=digits), digits=digits, format="fg", flag="#")
+  })
+  filter <- suffix(str, 1)=='.'
+  str[filter] <- prefix(str[filter], nchar(str[filter]) - 1)
   return(str)
 }
 
 #' display decimal places nicely
 #' @details keep trailing zeros
-#' @param x a real number
+#' @param x a real number (or a vector of real numbers)
 #' @param digits number of decimal places to keep
-#' @return a string
+#' @return a string (or a vector of strings)
 #' @export
 dp <- function(x, digits){
-  digits <- floor(log10(x)) + 1 + digits
-  str <- formatC(round(x, digits), digits=digits, format="fg", flag = "#")
-  if (suffix(str, 1)=='.') str <- prefix(str, nchar(str) - 1)
+  str <- sapply(x, function(y){
+    len <- floor(log10(abs(y))) + 1 + digits
+    formatC(round(y, digits), digits=len, format="fg", flag = "#")
+    })
+  filter <- suffix(str, 1)=='.'
+  str[filter] <- prefix(str[filter], nchar(str[filter]) - 1)
   return(str)
 }
 
