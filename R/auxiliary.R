@@ -220,15 +220,18 @@ dp <- function(x, digits){
 #' Simulation parameter data frame generation
 #' @description  create a dataframe of all possible parameter combinations in lexicographic order (if tags are supplied, use tag for column names)
 #' @param ... each argument should be of the form of tag = vector, meaning the variable named 'tag' takes values in 'vector'.
+#' @param shuffle whether to shuffle the rows of the simulation dataframe randomly
 #' @details A sample usage is sim.params(tag1 = vec1, tag2 = vec2, tag3 = vec3).
 #' @export
-sim.params <- function(...){
+sim.params <- function(..., shuffle=FALSE){
   x <- list(...)
   n <- length(x)
   vnames <- names(x); no.vn <- !nzchar(vnames)
   vnames[no.vn] <- paste0('Var', seq_len(n))[no.vn]
   df <- expand.grid(rev(x))[,rev(seq_len(n))]
+  if (shuffle) df <- df[sample(nrow(df)), ]
   colnames(df) <- vnames
+  rownames(df) <- seq_len(nrow(df))
   return(df)
 }
 

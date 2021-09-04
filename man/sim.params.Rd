@@ -4,10 +4,12 @@
 \alias{sim.params}
 \title{Simulation parameter data frame generation}
 \usage{
-sim.params(...)
+sim.params(..., shuffle = FALSE)
 }
 \arguments{
 \item{...}{each argument should be of the form of tag = vector, meaning the variable named 'tag' takes values in 'vector'.}
+
+\item{shuffle}{whether to shuffle the rows of the simulation dataframe randomly}
 }
 \description{
 create a dataframe of all possible parameter combinations in lexicographic order (if tags are supplied, use tag for column names)
