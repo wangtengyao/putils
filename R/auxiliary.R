@@ -223,13 +223,17 @@ dp <- function(x, digits){
 #' @param shuffle whether to shuffle the rows of the simulation dataframe randomly
 #' @details A sample usage is sim.params(tag1 = vec1, tag2 = vec2, tag3 = vec3).
 #' @export
-sim.params <- function(..., shuffle=FALSE){
+sim.params <- function(..., shuffle=FALSE, stringAsFactors=FALSE){
   x <- list(...)
   n <- length(x)
   vnames <- names(x); no.vn <- !nzchar(vnames)
   vnames[no.vn] <- paste0('Var', seq_len(n))[no.vn]
   df <- expand.grid(rev(x))[,rev(seq_len(n))]
   if (shuffle) df <- df[sample(nrow(df)), ]
+  if (!stringAsFactors){
+    for (j in 1:ncol(df))
+      if (is.factor(df[[j]])) df[[j]] <- as.character(df[[j]])
+  }
   colnames(df) <- vnames
   rownames(df) <- seq_len(nrow(df))
   return(df)

@@ -1,8 +1,8 @@
 Package: putils
 Type: Package
 Title: Personal Utility Functions
-Version: 1.3.0
-Date: 2021-08-01
+Version: 1.3.1
+Date: 2022-01-25
 Author: Tengyao Wang
 Maintainer: Tengyao Wang <tengyao.wang@ucl.ac.uk>
 Description: Contains functions that are frequently used in personal coding.

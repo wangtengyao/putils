@@ -4,7 +4,7 @@
 \alias{sim.params}
 \title{Simulation parameter data frame generation}
 \usage{
-sim.params(..., shuffle = FALSE)
+sim.params(..., shuffle = FALSE, stringAsFactors = FALSE)
 }
 \arguments{
 \item{...}{each argument should be of the form of tag = vector, meaning the variable named 'tag' takes values in 'vector'.}
