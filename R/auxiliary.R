@@ -291,12 +291,36 @@ extendToMatch <- function(source, destin) {
 #' @param ... variables to be bunched
 #' @return a list of variable names
 #' @export
-bunch = function(...) {
+bunch <- function(...) {
   List <- as.list(substitute(list(...)))[-1L]
   class(List) <- 'lbunch'
   return(List)
 }
 
+
+#' Evaluate multiple expressions
+#' @description useful to set all arguments in a function to their default values
+#' @param ... expressions of the form name=val
+#' @return a list of variable names
+#' @export
+evaluate <- function(...){
+  Envir = as.environment(-1)
+  x <- list(...)
+  names <- names(x)
+  y <- as.list(substitute(list(...)))[-1L]
+
+  #print(sapply(y, class))
+  vals <- rep(NA, length(names))
+  for (i in 1:length(names)){
+    if (names[i]!='') {
+      vals[i] <- y[[i]]
+      do.call('<-', list(names[i], vals[i]), envir=Envir)
+    } else {
+      names[i] <- as.character(y[[i]])
+    }
+  }
+  println('Following variables without a default and unevaluated: ', paste(names[is.na(vals)], collapse=', '))
+}
 
 #' Change all NA values in v to a
 #' @param v a vector
