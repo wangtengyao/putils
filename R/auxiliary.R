@@ -521,3 +521,29 @@ myplot <- function(x, y, col=NULL, style=NULL, data=.GlobalEnv, legend.position=
   }
   legend(legend.position, legend=legend.txt, col=legend.col, lty=legend.lty)
 }
+
+#' match rows of dataframes
+#' @param match_from data frame to match from
+#' @param match_to data frame to match to
+#' @param nomatch what to do if there is no match
+#' @param method choose between 'string' and 'list', the former compares entries by their string values (i.e. 10 and '10' are considered equal), the latter requires exact type match
+#' @description \code{match.data.frame} returns a vector of the positions of (first) matches of its first argument in its second. \code{%in%} is a more intuitive interface as a binary operator, which returns a logical vector indicating if there is a match or not for its left operand.
+#' @name match.data.frame
+#' @export
+match.data.frame <- function(match_from, match_to, nomatch=NA_integer_, method='string'){
+  if (method=='string'){
+    if (is.vector(match_from)) match_from <- matrix(match_from, nrow=1)
+    if (is.vector(match_to)) match_to <- matrix(match_to, nrow=1)
+
+    tmp_from <- apply(match_from, 1, function(v){paste(v, collapse='¬|`')})
+    tmp_to <- apply(match_to, 1, function(v){paste(v, collapse='¬|`')})
+  } else if (method == 'list') {
+    tmp_from <- split(match_from, seq_len(nrow(match_from)))
+    tmp_to <- split(match_to, seq_len(nrow(match_to)))
+  } else {
+    stop("match.data.frame: method needs to be 'string' or 'list'")
+  }
+  return(match(tmp_from, tmp_to, nomatch=nomatch))
+}
+
+
