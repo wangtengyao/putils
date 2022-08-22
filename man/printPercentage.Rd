@@ -7,7 +7,7 @@
 printPercentage(ind, tot)
 }
 \arguments{
-\item{ind}{a vector of for loop interator}
+\item{ind}{a vector of for loop iterator}
 
 \item{tot}{a vector of for loop lengths}
 }

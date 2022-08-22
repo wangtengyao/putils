@@ -78,7 +78,7 @@ write.latextable <- function(x, d=NA, s=NA, se=NULL, se.d=NA, se.s=NA, se.format
 
 
 #' Print percentage
-#' @param ind a vector of for loop interator
+#' @param ind a vector of for loop iterator
 #' @param tot a vector of for loop lengths
 #' @return on screen output of percentage
 #' @export
@@ -546,4 +546,15 @@ match.data.frame <- function(match_from, match_to, nomatch=NA_integer_, method='
   return(match(tmp_from, tmp_to, nomatch=nomatch))
 }
 
-
+#' sort dataframe
+#' @param df dataframe to be sorted
+#' @param sort_by column names to sort by, in decreasing order of priority
+#' @param decreasing a vector of the same length as sort_by, recycled to match length if needed
+sort.data.frame <- function(df, sort_by, decreasing=FALSE){
+  decreasing <- extendToMatch(decreasing, sort_by)
+  for (i in seq_along(sort_by)){
+    key <- rev(sort_by)[i]
+    df <- df[order(df[[key]], decreasing=rev(decreasing)[i]), ]
+  }
+  return(df)
+}
