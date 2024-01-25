@@ -550,6 +550,7 @@ match.data.frame <- function(match_from, match_to, nomatch=NA_integer_, method='
 #' @param df dataframe to be sorted
 #' @param sort_by column names to sort by, in decreasing order of priority
 #' @param decreasing a vector of the same length as sort_by, recycled to match length if needed
+#' @export
 sort.data.frame <- function(df, sort_by, decreasing=FALSE){
   decreasing <- extendToMatch(decreasing, sort_by)
   for (i in seq_along(sort_by)){
