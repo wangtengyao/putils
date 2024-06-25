@@ -7,7 +7,7 @@
 show.params(...)
 }
 \arguments{
-\item{x}{a vector of parameters}
+\item{...}{variables to be printed or a named vector of parameters}
 }
 \description{
 Print out parameters in a vector in a nice format

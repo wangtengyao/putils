@@ -21,5 +21,5 @@ match.data.frame(
 \item{method}{choose between 'string' and 'list', the former compares entries by their string values (i.e. 10 and '10' are considered equal), the latter requires exact type match}
 }
 \description{
-
+`match.data.frame` returns a vector of the positions of (first) matches of its first argument in its second. `%in%` is a more intuitive interface as a binary operator, which returns a logical vector indicating if there is a match or not for its left operand.
 }

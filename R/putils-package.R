@@ -2,7 +2,7 @@
 #'
 #' The putils package provides personal utility functions.
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name putils
 #'
 #' @importFrom graphics image

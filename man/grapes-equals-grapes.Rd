@@ -7,7 +7,7 @@
 l \%=\% r
 }
 \arguments{
-\item{l}{left side list, enclosed by the \code{bunch} function}
+\item{l}{left side list, enclosed by the `bunch` function}
 
 \item{r}{right side list}
 }
@@ -15,5 +15,5 @@ l \%=\% r
 assign multiple items in a list on RHS to multiple items in a list on LHS
 }
 \details{
-
+A sample usage is  `bunch(a,b,c) %=% list('hello', 123, list('apple', 'orange'))`, or `bunch(a,b,c) %=% 1:3`
 }

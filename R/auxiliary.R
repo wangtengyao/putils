@@ -241,19 +241,41 @@ sim.params <- function(..., shuffle=FALSE, stringAsFactors=FALSE){
 
 #' Show parameter values
 #' @description Print out parameters in a vector in a nice format
-#' @param x a vector of parameters
+#' @param ... variables to be printed or a named vector of parameters
 #' @export
-show.params <- function(...) {
-  names <- as.list(substitute(list(...)))[-1L]
+
+show.params <- function (...) {
   vals <- list(...)
-  paste(paste0(names, ' = ', vals), collapse=', ')
+  if (length(vals) == 1){
+    names <- names(vals[[1]])
+    vals <- unlist(vals[[1]])
+  } else {
+    names <- as.list(substitute(list(...)))[-1L]
+  }
+  paste(paste0(names, " = ", vals), collapse = ", ")
 }
 
+#' Filter data frame by condition on selected columns
+#' @description return a subset of rows of the original dataframe where the
+#' corresponding columns have values belonging to one of the rows of the vals
+#' matrix
+#' @param df data frame
+#' @param cols column indices or names to use for selection
+#' @param vals a matrix whose rows consist of allowed parameter combinations
+filter_data_frame <- function(df, cols, vals){
+  df_str <- apply(df[, cols], 1, show.params)
+  if (is.matrix(vals)){
+    vals_str <- apply(vals, 1, show.params)
+  } else {
+    vals_str <- show.params(vals)
+  }
+  df[df_str %in% vals_str, ]
+}
 
 #' Multiple assignment
 #' @description assign multiple items in a list on RHS to multiple items in a list on LHS
-#' @details A sample usage is  \code{bunch(a,b,c) %=% list('hello', 123, list('apple', 'orange'))}, or \code{bunch(a,b,c) %=% 1:3}
-#' @param l left side list, enclosed by the \code{bunch} function
+#' @details A sample usage is  `bunch(a,b,c) %=% list('hello', 123, list('apple', 'orange'))`, or `bunch(a,b,c) %=% 1:3`
+#' @param l left side list, enclosed by the `bunch` function
 #' @param r right side list
 #' @export
 '%=%' <- function(l, r) UseMethod('%=%')  # Generic form
@@ -527,7 +549,7 @@ myplot <- function(x, y, col=NULL, style=NULL, data=.GlobalEnv, legend.position=
 #' @param match_to data frame to match to
 #' @param nomatch what to do if there is no match
 #' @param method choose between 'string' and 'list', the former compares entries by their string values (i.e. 10 and '10' are considered equal), the latter requires exact type match
-#' @description \code{match.data.frame} returns a vector of the positions of (first) matches of its first argument in its second. \code{%in%} is a more intuitive interface as a binary operator, which returns a logical vector indicating if there is a match or not for its left operand.
+#' @description `match.data.frame` returns a vector of the positions of (first) matches of its first argument in its second. `%in%` is a more intuitive interface as a binary operator, which returns a logical vector indicating if there is a match or not for its left operand.
 #' @name match.data.frame
 #' @export
 match.data.frame <- function(match_from, match_to, nomatch=NA_integer_, method='string'){
