@@ -262,6 +262,8 @@ show.params <- function (...) {
 #' @param df data frame
 #' @param cols column indices or names to use for selection
 #' @param vals a matrix whose rows consist of allowed parameter combinations
+#' @export
+
 filter_data_frame <- function(df, cols, vals){
   df_str <- apply(df[, cols], 1, show.params)
   if (is.matrix(vals)){
