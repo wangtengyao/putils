@@ -583,3 +583,14 @@ sort_data_frame <- function(df, sort_by, decreasing=FALSE){
   }
   return(df)
 }
+
+#' find the best few entries of a vector
+#' @param x a vector
+#' @param k how many of the top entries
+#' @param largest if TRUE, find k largest entries, otherwise find k smallest
+#' @export
+find_best_entries <- function(x, k=1, largest=TRUE){
+  idx <- order(x, decreasing=largest)[1:k]
+  val <- x[idx]
+  return(list(val=val, idx=idx))
+}
